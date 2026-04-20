@@ -1,0 +1,2302 @@
+<!  'lateral_der': {
+    titulo: 'Fotografía lateral derecha del vehículo',
+    svg: `<svg viewBox="0 0 340 270" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="270" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="236" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="234" width="340" height="3" fill="#ddd"/>
+  <circle cx="96" cy="218" r="24" fill="#222"/>
+  <circle cx="96" cy="218" r="14" fill="#444"/>
+  <circle cx="244" cy="218" r="24" fill="#222"/>
+  <circle cx="244" cy="218" r="14" fill="#444"/>
+  <rect x="30" y="152" width="280" height="66" rx="6" fill="#4a90d9"/>
+  <rect x="80" y="112" width="190" height="42" rx="6" fill="#3a7fc9"/>
+  <rect x="86" y="117" width="94" height="32" rx="3" fill="#b0d4f0"/>
+  <rect x="186" y="117" width="78" height="32" rx="3" fill="#b0d4f0"/>
+  <rect x="30" y="165" width="28" height="18" rx="4" fill="#e63946"/>
+  <rect x="282" y="165" width="28" height="18" rx="4" fill="#ffe066"/>
+  <rect x="285" y="168" width="22" height="12" rx="2" fill="#fff9cc"/>
+  <rect x="14" y="38" width="312" height="202" rx="3" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="16" y="34" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">lateral completo en el encuadre</text>
+  <rect x="0" y="248" width="340" height="22" rx="0" fill="#fff8e6"/>
+  <text x="170" y="260" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Lateral derecho — vehículo entero</text>
+  <text x="170" y="268" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Paralelo al vehículo. Ambas ruedas visibles.</text>
+</svg>`,
+    nota: 'Todo el lateral en una sola foto. Paralelo al vehículo, ambas ruedas visibles.'
+  },
+DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Reformas de Vehículo — GuiAl Ingeniería</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap');
+
+:root {
+  --burdeos: #780000;
+  --burdeos-light: #9a0000;
+  --gris-titulo: #464646;
+  --gris-texto: #505050;
+  --gris-claro: #E0E0E0;
+  --gris-fondo: #f5f4f2;
+  --verde: #2d6a2d;
+  --amarillo: #b8860b;
+  --naranja: #c05000;
+  --bg: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--gris-fondo);
+  color: var(--gris-texto);
+  min-height: 100vh;
+}
+
+/* CABECERA */
+header {
+  background: var(--burdeos);
+  color: white;
+  padding: 18px 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(120,0,0,0.3);
+}
+.header-inner { padding-bottom: 14px; }
+header .brand {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+header .sub {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
+  font-weight: 400;
+}
+.progress-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+}
+.progress-fill {
+  height: 100%;
+  background: white;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* CONTENEDOR */
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* SECCIONES */
+.seccion {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.seccion-header {
+  background: var(--gris-titulo);
+  color: white;
+  padding: 12px 18px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.seccion-header .num {
+  background: var(--burdeos);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.seccion-body { padding: 18px; }
+
+/* CAMPOS */
+.campo { margin-bottom: 16px; }
+.campo:last-child { margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris-titulo);
+  margin-bottom: 6px;
+}
+label .req { color: var(--burdeos); }
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gris-claro);
+  border-radius: 8px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px;
+  color: var(--gris-titulo);
+  background: white;
+  transition: border-color 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--burdeos);
+}
+input.error-campo, select.error-campo { border-color: #cc0000 !important; }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23464646' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+textarea { resize: vertical; min-height: 80px; }
+
+.fila-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* CAMPO CON UNIDAD */
+.con-unidad { display: flex; gap: 8px; }
+.con-unidad input { flex: 1; min-width: 0; }
+.con-unidad select { width: 76px; flex-shrink: 0; padding-left: 10px; padding-right: 28px; }
+
+/* SEPARADOR */
+.sep { border: none; border-top: 1px solid var(--gris-claro); margin: 16px 0; }
+.sep-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 16px 0 12px;
+  position: relative;
+}
+.sep-label::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--gris-claro);
+  z-index: 0;
+}
+.sep-label span {
+  background: white;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+/* NOTA / AVISO */
+.nota {
+  background: #f0f4ff;
+  border-left: 3px solid #4a6fa5;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #1a2f5a;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.aviso {
+  background: #fff8e6;
+  border: 1.5px solid var(--amarillo);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #4a3600;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.aviso .ico { font-size: 20px; flex-shrink: 0; line-height: 1; }
+.aviso-peligro {
+  background: #fff0e6;
+  border: 1.5px solid var(--naranja);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #4a2000;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.aviso-peligro .ico { font-size: 22px; flex-shrink: 0; }
+.aviso-fotos {
+  background: #f0f7f0;
+  border: 1.5px solid var(--verde);
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 14px;
+  color: #1a3a1a;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* CHECKBOXES */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--gris-claro);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gris-titulo);
+  line-height: 1.4;
+  user-select: none;
+}
+.check-item:hover { border-color: var(--burdeos); background: #fdf5f5; }
+.check-item.activo { border-color: var(--burdeos); background: #fdf5f5; }
+.check-item input[type="checkbox"] {
+  width: 18px; height: 18px; min-width: 18px;
+  accent-color: var(--burdeos);
+  margin-top: 1px;
+  cursor: pointer;
+  appearance: auto; -webkit-appearance: auto;
+  border: none; background: transparent;
+  padding: 0;
+}
+
+/* BLOQUE EJE */
+.bloque-eje {
+  background: var(--gris-fondo);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.bloque-eje-titulo {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--burdeos);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* SUBSECCIÓN */
+.subsec {
+  border: 1.5px solid var(--gris-claro);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.subsec-hdr {
+  background: var(--gris-fondo);
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gris-titulo);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid var(--gris-claro);
+}
+.subsec-body { padding: 14px; }
+
+/* BLOQUE REFORMA (repetible 5E) */
+.bloque-reforma {
+  border: 1.5px solid var(--gris-claro);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.bloque-reforma-num {
+  font-size: 12px; font-weight: 700;
+  color: var(--burdeos);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.btn-eliminar {
+  position: absolute; top: 10px; right: 10px;
+  background: #fff0f0; border: 1.5px solid #ffcccc;
+  border-radius: 6px; color: #cc0000;
+  font-size: 12px; font-weight: 700;
+  padding: 4px 10px; cursor: pointer;
+}
+
+/* ESQUEMA VISUAL */
+.esquema-wrap {
+  background: var(--gris-fondo);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.esquema-wrap svg { max-width: 100%; }
+.esquema-caption {
+  font-size: 11px; color: #888;
+  margin-top: 6px; font-style: italic;
+}
+
+/* RGPD */
+.rgpd-texto {
+  font-size: 12px; color: #666;
+  line-height: 1.6;
+  background: var(--gris-fondo);
+  padding: 14px; border-radius: 8px;
+  max-height: 180px; overflow-y: auto;
+  margin-bottom: 14px;
+  border: 1px solid var(--gris-claro);
+}
+
+/* FOTO CHECKLIST */
+.foto-bloque-titulo {
+  font-size: 12px; font-weight: 700;
+  color: var(--burdeos);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 14px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--burdeos);
+}
+.foto-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--gris-claro);
+}
+.foto-item:last-child { border-bottom: none; }
+.foto-item input[type="checkbox"] {
+  width: 18px; height: 18px; min-width: 18px;
+  accent-color: var(--verde);
+  margin-top: 2px; cursor: pointer;
+  appearance: auto; -webkit-appearance: auto;
+  padding: 0; border: none; background: transparent;
+}
+.foto-nombre { flex: 1; font-size: 13px; color: var(--gris-texto); line-height: 1.4; }
+
+/* PASO ENVÍO */
+.paso { margin-bottom: 20px; }
+.paso-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--gris-titulo);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.paso-titulo .np {
+  background: var(--burdeos); color: white;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0;
+}
+.paso-desc { font-size: 13px; color: var(--gris-texto); margin-bottom: 8px; line-height: 1.5; }
+
+/* BOTONES */
+.btn {
+  width: 100%;
+  padding: 15px;
+  border: none; border-radius: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 17px; font-weight: 700;
+  letter-spacing: 0.5px; cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  margin-top: 10px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; text-decoration: none;
+}
+.btn-primary { background: var(--burdeos); color: white; }
+.btn-primary:active { background: var(--burdeos-light); transform: scale(0.98); }
+.btn-whatsapp { background: #25D366; color: white; }
+.btn-whatsapp:active { background: #1da855; transform: scale(0.98); }
+.btn-pdf { background: var(--gris-titulo); color: white; }
+.btn-pdf:active { background: #333; transform: scale(0.98); }
+.btn-secondary { background: var(--gris-claro); color: var(--gris-titulo); }
+.btn-añadir {
+  width: 100%; background: none;
+  border: 1.5px dashed var(--burdeos);
+  color: var(--burdeos); border-radius: 8px;
+  padding: 10px; font-family: 'Barlow', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-top: 8px;
+  transition: all 0.2s;
+}
+.btn-añadir:hover { background: #fdf5f5; }
+
+/* ALERTA */
+.alerta-error {
+  padding: 12px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  background: #fff0f0; color: #8b0000;
+  border: 1.5px solid #ffcccc;
+  display: none; margin-top: 12px;
+  line-height: 1.6;
+}
+.alerta-error.visible { display: block; }
+
+/* AYUDA */
+.ayuda-campo { font-size: 11px; color: #999; margin-top: 4px; }
+.ayuda-campo.error-txt { color: #cc0000; display: none; }
+.ayuda-campo.error-txt.visible { display: block; }
+
+/* FOOTER */
+.footer-note { text-align: center; font-size: 11px; color: #aaa; margin-top: 20px; }
+
+@media (max-width: 480px) {
+  .fila-2 { grid-template-columns: 1fr; }
+}
+
+/* MODAL FOTO EJEMPLO */
+.modal-foto {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-foto.visible { display: flex; }
+.modal-foto-inner {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-foto-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gris-titulo);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-right: 28px;
+}
+.modal-foto-cerrar {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none; border: none;
+  font-size: 22px; cursor: pointer;
+  color: var(--gris-titulo); line-height: 1;
+}
+.modal-foto svg { width: 100%; height: auto; display: block; }
+.modal-foto-nota {
+  font-size: 12px; color: #666;
+  margin-top: 10px; line-height: 1.5;
+  text-align: center;
+}
+
+/* BOTÓN VER EJEMPLO */
+.btn-ver-ejemplo {
+  background: none;
+  border: 1.5px solid var(--burdeos);
+  color: var(--burdeos);
+  border-radius: 6px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.btn-ver-ejemplo:hover { background: var(--burdeos); color: white; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">GuiAl Ingeniería</div>
+    <div class="sub">Ficha de reforma de vehículo · Rellena y envía por WhatsApp</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+</header>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 1 — PRESENTACIÓN Y RGPD
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">1</span> Información y protección de datos</div>
+  <div class="seccion-body">
+    <p style="font-size:14px;line-height:1.6;margin-bottom:16px;color:var(--gris-texto);">
+      Gracias por confiar en <strong>GuiAl Ingeniería</strong> para la legalización de la reforma de su vehículo.
+      Este formulario recoge los datos necesarios para tramitar su expediente. Rellénelo con la información
+      que le facilite el taller que ha realizado la reforma. Si tiene cualquier duda, contacte con nosotros
+      al <strong>623 006 822</strong>.
+    </p>
+    <div class="rgpd-texto">
+      <strong>INFORMACIÓN BÁSICA SOBRE PROTECCIÓN DE DATOS</strong><br><br>
+      <strong>Responsable:</strong> Alberto Jesús Ortiz Sánchez · GuiAl Ingeniería · guialingenieria@gmail.com · Berja, Almería.<br><br>
+      <strong>Finalidad:</strong> Tramitar el expediente de legalización de reforma de vehículo, gestionar la relación contractual y, si nos lo autoriza, enviarle información sobre nuestros servicios de ingeniería.<br><br>
+      <strong>Legitimación:</strong> Ejecución del contrato de prestación de servicios de ingeniería (Art. 6.1.b RGPD). Para comunicaciones comerciales: su consentimiento expreso (Art. 6.1.a RGPD).<br><br>
+      <strong>Destinatarios:</strong> Sus datos no serán cedidos a terceros salvo obligación legal o necesidad para la prestación del servicio (p.ej. Jefatura de Tráfico, Ministerio de Industria, estaciones ITV).<br><br>
+      <strong>Derechos:</strong> Puede ejercer sus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad dirigiéndose a guialingenieria@gmail.com. Tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).<br><br>
+      <strong>Conservación:</strong> Sus datos se conservarán durante el tiempo necesario para la gestión del expediente y el plazo legalmente exigido para documentación técnica de reformas de vehículos.<br><br>
+      Puede consultar la información adicional y detallada sobre protección de datos contactando con nosotros en guialingenieria@gmail.com.
+    </div>
+    <label class="check-item" id="lbl_rgpd" onclick="toggleCheck('rgpd_acepto','lbl_rgpd')">
+      <input type="checkbox" id="rgpd_acepto"> He leído y acepto la política de protección de datos <span class="req">*</span>
+    </label>
+    <label class="check-item" id="lbl_comercial" onclick="toggleCheck('rgpd_comercial','lbl_comercial')">
+      <input type="checkbox" id="rgpd_comercial"> Autorizo el envío de información comercial y publicitaria de GuiAl Ingeniería
+    </label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 2 — DATOS DEL PROPIETARIO
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">2</span> Datos del propietario del vehículo</div>
+  <div class="seccion-body">
+    <div class="campo">
+      <label>Nombre y apellidos <span class="req">*</span></label>
+      <input type="text" id="prop_nombre" placeholder="Nombre completo">
+    </div>
+    <div class="campo">
+      <label>NIF / CIF <span class="req">*</span></label>
+      <input type="text" id="prop_nif" placeholder="Ej: 12345678A" oninput="this.value=this.value.toUpperCase().replace(/\s/g,'')">
+      <div class="ayuda-campo error-txt" id="prop_nif_err">Formato de NIF/CIF no válido</div>
+    </div>
+    <div class="campo">
+      <label>Dirección <span class="req">*</span></label>
+      <input type="text" id="prop_dir" placeholder="Calle, número, piso...">
+    </div>
+    <div class="fila-2">
+      <div class="campo">
+        <label>Población <span class="req">*</span></label>
+        <input type="text" id="prop_pob" placeholder="Municipio">
+      </div>
+      <div class="campo">
+        <label>Código postal <span class="req">*</span></label>
+        <input type="text" id="prop_cp" placeholder="00000" maxlength="5" oninput="this.value=this.value.replace(/\D/g,'')">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Provincia <span class="req">*</span></label>
+      <select id="prop_prov"><option value="">— Selecciona —</option></select>
+    </div>
+    <div class="fila-2">
+      <div class="campo">
+        <label>Teléfono <span class="req">*</span></label>
+        <input type="tel" id="prop_tel" placeholder="600 000 000">
+      </div>
+      <div class="campo">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="prop_email" placeholder="correo@ejemplo.com">
+      </div>
+    </div>
+
+    <div class="sep-label"><span>Datos del vehículo</span></div>
+
+    <div class="fila-2">
+      <div class="campo">
+        <label>Matrícula <span class="req">*</span></label>
+        <input type="text" id="veh_matricula" placeholder="Ej: 1234 ABC" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="campo">
+        <label>Año de fabricación</label>
+        <input type="text" id="veh_anio" placeholder="Ej: 2018" maxlength="4">
+      </div>
+    </div>
+    <div class="fila-2">
+      <div class="campo">
+        <label>Marca</label>
+        <input type="text" id="veh_marca" placeholder="Ej: Seat">
+      </div>
+      <div class="campo">
+        <label>Modelo</label>
+        <input type="text" id="veh_modelo" placeholder="Ej: León">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 3 — DATOS DEL TALLER
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">3</span> Datos del taller que realiza la reforma</div>
+  <div class="seccion-body">
+
+    <!-- Selector de escenario -->
+    <p style="font-size:13px;font-weight:600;color:var(--gris-titulo);margin-bottom:10px;">¿Cuál es la situación del taller? <span class="req">*</span></p>
+    <label class="check-item" id="lbl_tall_esc1" onclick="setTallerEscenario(1)">
+      <input type="radio" name="tall_escenario" id="tall_esc1" value="1"> 📋 Tengo los datos del taller — Introduciré el nombre, responsable, NIF, dirección y demás datos del taller
+    </label>
+    <label class="check-item" id="lbl_tall_esc2" onclick="setTallerEscenario(2)">
+      <input type="radio" name="tall_escenario" id="tall_esc2" value="2"> 🗂️ GuiAl ya tiene los datos del taller — Solo necesito indicar el nombre del taller para identificarlo
+    </label>
+    <label class="check-item" id="lbl_tall_esc3" onclick="setTallerEscenario(3)">
+      <input type="radio" name="tall_escenario" id="tall_esc3" value="3"> 🤝 El taller lo gestiona GuiAl directamente — No necesito introducir ningún dato del taller
+    </label>
+    <div class="ayuda-campo error-txt" id="tall_esc_err" style="margin-bottom:12px;">Seleccione una opción</div>
+
+    <!-- Escenario 1 y 2: campo nombre del taller -->
+    <div id="tall_campos_comunes" style="display:none;">
+      <div class="sep-label" style="margin-top:16px;"><span>Datos del taller</span></div>
+      <div class="campo">
+        <label>Nombre del taller <span class="req">*</span></label>
+        <input type="text" id="tall_nombre" placeholder="Razón social o nombre comercial">
+      </div>
+
+      <!-- Solo escenario 1: resto de campos del taller -->
+      <div id="tall_campos_resto" style="display:none;">
+        <div class="campo">
+          <label>Responsable del taller <span class="req">*</span></label>
+          <input type="text" id="tall_resp" placeholder="Nombre y apellidos">
+        </div>
+        <div class="campo">
+          <label>NIF / CIF <span class="req">*</span></label>
+          <input type="text" id="tall_nif" placeholder="Ej: B12345678" oninput="this.value=this.value.toUpperCase().replace(/\s/g,\'\')">
+        </div>
+        <div class="campo">
+          <label>Dirección <span class="req">*</span></label>
+          <input type="text" id="tall_dir" placeholder="Calle, número...">
+        </div>
+        <div class="fila-2">
+          <div class="campo">
+            <label>Población <span class="req">*</span></label>
+            <input type="text" id="tall_pob" placeholder="Municipio">
+          </div>
+          <div class="campo">
+            <label>Código postal <span class="req">*</span></label>
+            <input type="text" id="tall_cp" placeholder="00000" maxlength="5" oninput="this.value=this.value.replace(/\D/g,\'\')">
+          </div>
+        </div>
+        <div class="campo">
+          <label>Provincia <span class="req">*</span></label>
+          <select id="tall_prov"><option value="">— Selecciona —</option></select>
+        </div>
+        <div class="fila-2">
+          <div class="campo">
+            <label>Teléfono <span class="req">*</span></label>
+            <input type="tel" id="tall_tel" placeholder="600 000 000">
+          </div>
+          <div class="campo">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="tall_email" placeholder="taller@ejemplo.com">
+          </div>
+        </div>
+        <div class="campo">
+          <label>Nº Registro Industrial <span class="req">*</span></label>
+          <input type="text" id="tall_reg_ind" placeholder="Nº de registro">
+        </div>
+        <div class="campo">
+          <label>Nº Registro Especial <span style="font-weight:400;color:#999">(si dispone)</span></label>
+          <input type="text" id="tall_reg_esp" placeholder="Nº de registro especial (opcional)">
+        </div>
+        <div class="campo">
+          <label>Actividad del taller <span class="req">*</span></label>
+          <select id="tall_actividad">
+            <option value="">— Selecciona —</option>
+            <option value="Mecánica general">Mecánica general</option>
+            <option value="Electromecánica">Electromecánica</option>
+            <option value="Mecánica y electricidad">Mecánica y electricidad</option>
+            <option value="Mecánica, electricidad y electrónica">Mecánica, electricidad y electrónica</option>
+            <option value="Carrocería y pintura">Carrocería y pintura</option>
+            <option value="Neumáticos y ruedas">Neumáticos y ruedas</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Solo escenario 2: nota informativa -->
+      <div id="tall_nota_esc2" style="display:none;">
+        <div class="nota">
+          Los datos completos del taller ya están en poder de GuiAl Ingeniería. Solo es necesario el nombre para identificarlo.
+        </div>
+      </div>
+    </div>
+
+    <!-- Solo escenario 3: nota sin campos -->
+    <div id="tall_nota_esc3" style="display:none;">
+      <div class="nota" style="margin-top:12px;">
+        GuiAl Ingeniería gestionará directamente los datos del taller. No es necesario que introduzca ningún dato.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 4 — SELECTOR DE REFORMAS
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">4</span> Reformas realizadas</div>
+  <div class="seccion-body">
+    <p style="font-size:13px;color:var(--gris-texto);margin-bottom:14px;line-height:1.5;">
+      Marque todas las reformas que se hayan realizado en el vehículo. Solo aparecerán las secciones correspondientes a las reformas marcadas.
+    </p>
+    <label class="check-item" id="lbl_llantas" onclick="toggleReforma('llantas')">
+      <input type="checkbox" id="ref_llantas"> 🔵 Llantas y/o neumáticos
+    </label>
+    <label class="check-item" id="lbl_separadores" onclick="toggleReforma('separadores')">
+      <input type="checkbox" id="ref_separadores"> 🔵 Separadores de rueda
+    </label>
+    <label class="check-item" id="lbl_suspension" onclick="toggleReforma('suspension')">
+      <input type="checkbox" id="ref_suspension"> 🔵 Suspensión (muelles y/o amortiguadores)
+    </label>
+    <label class="check-item" id="lbl_carroceria" onclick="toggleReforma('carroceria')">
+      <input type="checkbox" id="ref_carroceria"> 🔵 Carrocería (paragolpes, taloneras, faldones, alerón, difusor, aletines)
+    </label>
+    <label class="check-item" id="lbl_otras" onclick="toggleReforma('otras')">
+      <input type="checkbox" id="ref_otras"> 🔵 Otras reformas
+    </label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 5A — LLANTAS Y NEUMÁTICOS (condicional)
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_llantas" style="display:none;">
+  <div class="seccion-header"><span class="num">5A</span> Llantas y neumáticos</div>
+  <div class="seccion-body">
+    <div class="bloque-eje">
+      <div class="bloque-eje-titulo">🔷 Eje delantero</div>
+      <div class="campo">
+        <label>Marca de las llantas</label>
+        <input type="text" id="llan_del_marca" placeholder="Ej: OZ Racing">
+      </div>
+      <div class="campo">
+        <label>Medidas de las llantas</label>
+        <input type="text" id="llan_del_llanta" placeholder="Ej: 8×16&quot;">
+      </div>
+      <div class="campo">
+        <label>Medidas del neumático</label>
+        <input type="text" id="llan_del_neu" placeholder="Ej: 225/45 R17 91W">
+      </div>
+    </div>
+    <div class="bloque-eje">
+      <div class="bloque-eje-titulo">🔷 Eje trasero</div>
+      <div class="campo">
+        <label>Marca de las llantas</label>
+        <input type="text" id="llan_tra_marca" placeholder="Ej: OZ Racing">
+      </div>
+      <div class="campo">
+        <label>Medidas de las llantas</label>
+        <input type="text" id="llan_tra_llanta" placeholder="Ej: 8×16&quot;">
+      </div>
+      <div class="campo">
+        <label>Medidas del neumático</label>
+        <input type="text" id="llan_tra_neu" placeholder="Ej: 225/45 R17 91W">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Observaciones</label>
+      <textarea id="llan_obs" placeholder="Observaciones sobre la reforma de llantas/neumáticos..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 5B — SEPARADORES (condicional)
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_separadores" style="display:none;">
+  <div class="seccion-header"><span class="num">5B</span> Separadores de rueda</div>
+  <div class="seccion-body">
+    <div class="bloque-eje">
+      <div class="bloque-eje-titulo">🔷 Eje delantero</div>
+      <div class="fila-2">
+        <div class="campo">
+          <label>Marca</label>
+          <input type="text" id="sep_del_marca" placeholder="Marca">
+        </div>
+        <div class="campo">
+          <label>Referencia</label>
+          <input type="text" id="sep_del_ref" placeholder="Referencia">
+        </div>
+      </div>
+      <div class="campo">
+        <label>Espesor</label>
+        <div class="con-unidad">
+          <input type="number" id="sep_del_esp" placeholder="Ej: 20" min="0" step="0.1">
+          <select id="sep_del_esp_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Medida de la llanta instalada</label>
+        <input type="text" id="sep_del_llanta" placeholder="Ej: 8×16&quot;">
+      </div>
+      <div class="campo">
+        <label>Medidas del neumático instalado</label>
+        <input type="text" id="sep_del_neu" placeholder="Ej: 225/45 R17 91W">
+      </div>
+      <div class="campo">
+        <label>Ancho de vía resultante</label>
+        <div class="con-unidad">
+          <input type="number" id="sep_del_via" placeholder="Ej: 1520" min="0" step="1">
+          <select id="sep_del_via_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="bloque-eje">
+      <div class="bloque-eje-titulo">🔷 Eje trasero</div>
+      <div class="fila-2">
+        <div class="campo">
+          <label>Marca</label>
+          <input type="text" id="sep_tra_marca" placeholder="Marca">
+        </div>
+        <div class="campo">
+          <label>Referencia</label>
+          <input type="text" id="sep_tra_ref" placeholder="Referencia">
+        </div>
+      </div>
+      <div class="campo">
+        <label>Espesor</label>
+        <div class="con-unidad">
+          <input type="number" id="sep_tra_esp" placeholder="Ej: 20" min="0" step="0.1">
+          <select id="sep_tra_esp_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Medida de la llanta instalada</label>
+        <input type="text" id="sep_tra_llanta" placeholder="Ej: 8×16&quot;">
+      </div>
+      <div class="campo">
+        <label>Medidas del neumático instalado</label>
+        <input type="text" id="sep_tra_neu" placeholder="Ej: 225/45 R17 91W">
+      </div>
+      <div class="campo">
+        <label>Ancho de vía resultante</label>
+        <div class="con-unidad">
+          <input type="number" id="sep_tra_via" placeholder="Ej: 1520" min="0" step="1">
+          <select id="sep_tra_via_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="campo">
+      <label>Observaciones</label>
+      <textarea id="sep_obs" placeholder="Observaciones sobre la reforma de separadores..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 5C — SUSPENSIÓN (condicional)
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_suspension" style="display:none;">
+  <div class="seccion-header"><span class="num">5C</span> Suspensión</div>
+  <div class="seccion-body">
+    <div class="aviso-peligro">
+      <span class="ico">⚠️</span>
+      <div><strong>IMPORTANTE:</strong> Si no dispone del certificado con las medidas de los muelles, estas deben medirse <strong>ANTES DE MONTAR LA SUSPENSIÓN</strong>.</div>
+    </div>
+
+    <!-- Amortiguadores -->
+    <div class="subsec">
+      <div class="subsec-hdr">Amortiguadores — Referencias</div>
+      <div class="subsec-body">
+        <div class="fila-2">
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Delantero</div>
+            <div class="campo"><label>Marca</label><input type="text" id="amor_del_marca" placeholder="Marca"></div>
+            <div class="campo"><label>Referencia</label><input type="text" id="amor_del_ref" placeholder="Referencia"></div>
+          </div>
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Trasero</div>
+            <div class="campo"><label>Marca</label><input type="text" id="amor_tra_marca" placeholder="Marca"></div>
+            <div class="campo"><label>Referencia</label><input type="text" id="amor_tra_ref" placeholder="Referencia"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Muelles referencias -->
+    <div class="subsec">
+      <div class="subsec-hdr">Muelles — Referencias</div>
+      <div class="subsec-body">
+        <div class="fila-2">
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Delantero</div>
+            <div class="campo"><label>Marca</label><input type="text" id="mue_del_marca" placeholder="Marca"></div>
+            <div class="campo"><label>Referencia</label><input type="text" id="mue_del_ref" placeholder="Referencia"></div>
+          </div>
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Trasero</div>
+            <div class="campo"><label>Marca</label><input type="text" id="mue_tra_marca" placeholder="Marca"></div>
+            <div class="campo"><label>Referencia</label><input type="text" id="mue_tra_ref" placeholder="Referencia"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Muelles medidas -->
+    <div class="subsec">
+      <div class="subsec-hdr">Muelles — Medidas</div>
+      <div class="subsec-body">
+        <!-- Esquema muelle -->
+        <div class="esquema-wrap">
+          <svg viewBox="0 0 260 310" xmlns="http://www.w3.org/2000/svg" style="max-width:200px;">
+            <!-- Top plate -->
+            <rect x="55" y="12" width="110" height="7" rx="3" fill="#464646"/>
+            <!-- Spring coils (S-curves) -->
+            <path d="M 55,19 C 55,30 165,30 165,41 C 165,52 55,52 55,63 C 55,74 165,74 165,85 C 165,96 55,96 55,107 C 55,118 165,118 165,129 C 165,140 55,140 55,151 C 55,162 165,162 165,173 C 165,184 55,184 55,195 C 55,206 165,206 165,217 C 165,228 55,228 55,239 C 55,246 165,246 165,251"
+              stroke="#464646" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Bottom plate -->
+            <rect x="55" y="251" width="110" height="7" rx="3" fill="#464646"/>
+            <!-- Arrow markers def -->
+            <defs>
+              <marker id="arr-s" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
+                <polygon points="0,0 7,3.5 0,7" fill="#780000"/>
+              </marker>
+              <marker id="arr-e" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse">
+                <polygon points="0,0 7,3.5 0,7" fill="#780000"/>
+              </marker>
+            </defs>
+            <!-- (3) Longitud: vertical arrow left -->
+            <line x1="32" y1="19" x2="32" y2="258" stroke="#780000" stroke-width="1.5"
+              marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+            <rect x="9" y="126" width="18" height="18" rx="9" fill="#780000"/>
+            <text x="18" y="138" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial,sans-serif">3</text>
+            <!-- (2) Diámetro exterior: horizontal arrow bottom -->
+            <line x1="55" y1="278" x2="165" y2="278" stroke="#780000" stroke-width="1.5"
+              marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+            <rect x="101" y="288" width="18" height="18" rx="9" fill="#780000"/>
+            <text x="110" y="300" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial,sans-serif">2</text>
+            <!-- (1) Diámetro espira: circle on wire -->
+            <circle cx="57" cy="107" r="7" fill="none" stroke="#780000" stroke-width="2"/>
+            <line x1="52" y1="101" x2="36" y2="88" stroke="#780000" stroke-width="1.5"/>
+            <rect x="19" y="76" width="18" height="18" rx="9" fill="#780000"/>
+            <text x="28" y="88" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Arial,sans-serif">1</text>
+          </svg>
+          <div class="esquema-caption">
+            <strong>1</strong> Diámetro de la espira &nbsp;|&nbsp; <strong>2</strong> Diámetro exterior &nbsp;|&nbsp; <strong>3</strong> Longitud
+          </div>
+        </div>
+
+        <div class="fila-2">
+          <!-- Delantero -->
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Muelle delantero</div>
+            <div class="campo">
+              <label>(3) Longitud</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_del_long" placeholder="Ej: 280" min="0" step="1">
+                <select id="mue_del_long_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>(2) Diámetro exterior</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_del_dext" placeholder="Ej: 65" min="0" step="0.1">
+                <select id="mue_del_dext_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>(1) Diámetro de la espira</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_del_desp" placeholder="Ej: 12" min="0" step="0.1">
+                <select id="mue_del_desp_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>Nº de vueltas</label>
+              <input type="number" id="mue_del_vue" placeholder="Ej: 7" min="0" step="0.5">
+            </div>
+          </div>
+          <!-- Trasero -->
+          <div>
+            <div class="bloque-eje-titulo" style="margin-bottom:10px;">Muelle trasero</div>
+            <div class="campo">
+              <label>(3) Longitud</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_tra_long" placeholder="Ej: 260" min="0" step="1">
+                <select id="mue_tra_long_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>(2) Diámetro exterior</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_tra_dext" placeholder="Ej: 60" min="0" step="0.1">
+                <select id="mue_tra_dext_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>(1) Diámetro de la espira</label>
+              <div class="con-unidad">
+                <input type="number" id="mue_tra_desp" placeholder="Ej: 11" min="0" step="0.1">
+                <select id="mue_tra_desp_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+              </div>
+            </div>
+            <div class="campo">
+              <label>Nº de vueltas</label>
+              <input type="number" id="mue_tra_vue" placeholder="Ej: 6.5" min="0" step="0.5">
+            </div>
+          </div>
+        </div>
+
+        <div class="campo" style="margin-top:12px;">
+          <label>Altura final del vehículo tras la reforma</label>
+          <div class="con-unidad">
+            <input type="number" id="sus_alt_final" placeholder="Ej: 1380" min="0" step="1">
+            <select id="sus_alt_final_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Observaciones</label>
+      <textarea id="sus_obs" placeholder="Observaciones sobre la reforma de suspensión..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 5D — CARROCERÍA (condicional)
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_carroceria" style="display:none;">
+  <div class="seccion-header"><span class="num">5D</span> Carrocería</div>
+  <div class="seccion-body">
+    <div class="nota">
+      Indique los elementos de carrocería que se hayan sustituido o añadido. Para cada elemento marcado, complete sus datos.
+    </div>
+    <p style="font-size:13px;font-weight:600;color:var(--gris-titulo);margin-bottom:10px;">Elementos afectados:</p>
+    <div id="car_checks"></div>
+    <div id="car_bloques"></div>
+    <div class="campo">
+      <label>Observaciones</label>
+      <textarea id="car_obs" placeholder="Observaciones sobre la reforma de carrocería..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 5E — OTRAS REFORMAS (condicional)
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_otras" style="display:none;">
+  <div class="seccion-header"><span class="num">5E</span> Otras reformas</div>
+  <div class="seccion-body">
+    <div class="nota">
+      Si la reforma realizada no encaja en las categorías anteriores (volante, escape, freno, asientos, enganches, GLP, cambio de color, luces, etc.), descríbala aquí. Puede añadir varias reformas pulsando el botón.
+    </div>
+    <div id="otras_container">
+      <!-- Primer bloque generado por JS -->
+    </div>
+    <button class="btn-añadir" onclick="añadirOtraReforma()">+ Añadir otra reforma</button>
+    <div class="campo" style="margin-top:16px;">
+      <label>Observaciones</label>
+      <textarea id="otras_obs" placeholder="Observaciones sobre otras reformas..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 6 — MEDIDAS FINALES DEL VEHÍCULO
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">6</span> Medidas finales del vehículo</div>
+  <div class="seccion-body">
+
+    <!-- Esquema de medidas -->
+    <div class="esquema-wrap">
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <!-- Car body side view -->
+        <rect x="30" y="80" width="200" height="45" rx="4" fill="#e8e8e8" stroke="#464646" stroke-width="1.5"/>
+        <path d="M 60,80 L 85,50 L 175,50 L 195,80" fill="#e8e8e8" stroke="#464646" stroke-width="1.5"/>
+        <circle cx="70" cy="125" r="18" fill="#888" stroke="#464646" stroke-width="1.5"/>
+        <circle cx="190" cy="125" r="18" fill="#888" stroke="#464646" stroke-width="1.5"/>
+        <line x1="20" y1="143" x2="280" y2="143" stroke="#464646" stroke-width="1.5"/>
+        <!-- Height arrow (H) -->
+        <line x1="240" y1="143" x2="240" y2="50" stroke="#780000" stroke-width="1.5"
+          marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+        <text x="252" y="100" fill="#780000" font-size="11" font-weight="bold" font-family="Arial,sans-serif">H</text>
+        <!-- Length arrow (L) -->
+        <line x1="30" y1="160" x2="230" y2="160" stroke="#780000" stroke-width="1.5"
+          marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+        <text x="120" y="175" text-anchor="middle" fill="#780000" font-size="11" font-weight="bold" font-family="Arial,sans-serif">L</text>
+        <!-- Voladizo -->
+        <line x1="190" y1="165" x2="230" y2="165" stroke="#b8860b" stroke-width="1.5"
+          marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+        <text x="210" y="176" text-anchor="middle" fill="#b8860b" font-size="9" font-family="Arial,sans-serif">Vol.</text>
+      </svg>
+      <!-- Front view for width/track -->
+      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" style="max-width:55%;margin-top:8px;">
+        <rect x="30" y="20" width="140" height="55" rx="4" fill="#e8e8e8" stroke="#464646" stroke-width="1.5"/>
+        <!-- Wheels -->
+        <rect x="5" y="30" width="22" height="40" rx="4" fill="#888" stroke="#464646" stroke-width="1.5"/>
+        <rect x="173" y="30" width="22" height="40" rx="4" fill="#888" stroke="#464646" stroke-width="1.5"/>
+        <!-- Total width -->
+        <line x1="5" y1="10" x2="195" y2="10" stroke="#780000" stroke-width="1.5"
+          marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+        <text x="100" y="8" text-anchor="middle" fill="#780000" font-size="9" font-family="Arial,sans-serif">Anchura total</text>
+        <!-- Track width -->
+        <line x1="16" y1="82" x2="184" y2="82" stroke="#b8860b" stroke-width="1.5"
+          marker-start="url(#arr-e)" marker-end="url(#arr-s)"/>
+        <text x="100" y="95" text-anchor="middle" fill="#b8860b" font-size="9" font-family="Arial,sans-serif">Vía</text>
+      </svg>
+      <div class="esquema-caption">Referencia de medidas del vehículo</div>
+    </div>
+
+    <div class="fila-2">
+      <div class="campo">
+        <label>Altura total</label>
+        <div class="con-unidad">
+          <input type="number" id="med_alt" placeholder="Ej: 1450" min="0" step="1">
+          <select id="med_alt_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Anchura total</label>
+        <div class="con-unidad">
+          <input type="number" id="med_anch" placeholder="Ej: 1980" min="0" step="1">
+          <select id="med_anch_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="fila-2">
+      <div class="campo">
+        <label>Vía anterior (delantera)</label>
+        <div class="con-unidad">
+          <input type="number" id="med_via_ant" placeholder="Ej: 1540" min="0" step="1">
+          <select id="med_via_ant_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Vía posterior (trasera)</label>
+        <div class="con-unidad">
+          <input type="number" id="med_via_pos" placeholder="Ej: 1530" min="0" step="1">
+          <select id="med_via_pos_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="fila-2">
+      <div class="campo">
+        <label>Longitud total</label>
+        <div class="con-unidad">
+          <input type="number" id="med_long" placeholder="Ej: 4390" min="0" step="1">
+          <select id="med_long_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Voladizo trasero</label>
+        <div class="con-unidad">
+          <input type="number" id="med_vol" placeholder="Ej: 850" min="0" step="1">
+          <select id="med_vol_u"><option value="mm">mm</option><option value="cm">cm</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 7 — OBSERVACIONES GENERALES
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">7</span> Observaciones generales</div>
+  <div class="seccion-body">
+    <div class="campo">
+      <label>Observaciones adicionales (opcional)</label>
+      <textarea id="obs_gen" rows="4" placeholder="Indique cualquier aclaración, particularidad o información adicional que considere relevante sobre el vehículo o la reforma..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 8 — CHECKLIST DE FOTOGRAFÍAS
+══════════════════════════════════════════════════════ -->
+<div class="seccion">
+  <div class="seccion-header"><span class="num">8</span> Fotografías a enviar por WhatsApp</div>
+  <div class="seccion-body">
+    <div class="aviso-fotos">
+      📱 <strong>Último paso — Fotografías:</strong> Sin estas fotografías no se puede tramitar el expediente.
+      Envíelas al WhatsApp <strong>623 006 822</strong> junto con el formulario.
+    </div>
+    <div class="nota" style="margin-bottom:12px;">📷 Pulse el botón de abajo para ver ejemplos de cómo hacer cada fotografía.</div>
+    <a href="https://guialingenieria.github.io/guia-fotos-reformas/" target="_blank" class="btn btn-secondary" style="margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">
+      📷 Ver guía de fotografías
+    </a>
+
+    <!-- BLOQUE A: Documentación (siempre) -->
+    <div class="foto-bloque-titulo">Bloque A — Documentación del vehículo (obligatorio siempre)</div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Permiso de circulación — cara delantera</span></div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Permiso de circulación — cara trasera</span></div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Ficha técnica / Tarjeta ITV — todas las páginas</span></div>
+
+    <!-- BLOQUE B: Generales (siempre) -->
+    <div class="foto-bloque-titulo">Bloque B — Fotografías generales del vehículo (obligatorio siempre)</div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Frontal completo (vehículo entero, no cortado)</span></div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Trasera completa (vehículo entero)</span></div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Lateral izquierdo (vehículo entero)</span></div>
+    <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Lateral derecho (vehículo entero)</span></div>
+
+    <!-- BLOQUE C: Específicas (condicional) -->
+    <div id="fotos_suspension" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Suspensión</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Suspensión delantera montada</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Suspensión trasera montada</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Referencia de muelles delanteros (etiqueta o grabado)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Referencia de muelles traseros (etiqueta o grabado)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Referencia de amortiguadores delanteros</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Referencia de amortiguadores traseros</span></div>
+    </div>
+
+    <div id="fotos_llantas" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Llantas y neumáticos</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Marcaje del neumático delantero (flanco visible con medidas e índices)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Marcaje del neumático trasero (flanco visible con medidas e índices)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Contraseña de homologación de los neumáticos delanteros</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Contraseña de homologación de los neumáticos traseros</span></div>
+    </div>
+
+    <div id="fotos_separadores" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Separadores</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto de los separadores montados</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Comprobación guardabarros delanteros con nivel (no puede sobresalir ni un milímetro)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Comprobación guardabarros traseros con nivel (no puede sobresalir ni un milímetro)</span></div>
+    </div>
+
+    <div id="fotos_car_pg_del" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Carrocería: Paragolpes delantero</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del paragolpes delantero</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del dispositivo de remolcado delantero</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del faldón delantero (si aplica)</span></div>
+    </div>
+
+    <div id="fotos_car_pg_tra" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Carrocería: Paragolpes trasero</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del paragolpes trasero</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del dispositivo de remolcado trasero</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del difusor trasero (si aplica)</span></div>
+    </div>
+
+    <div id="fotos_car_talon" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Carrocería: Taloneras</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto de las taloneras instaladas</span></div>
+    </div>
+
+    <div id="fotos_car_aleron" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque C — Carrocería: Alerón</div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del alerón (vista posterior)</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Foto del alerón lateral (para comprobar ángulo de visión de 3ª luz de freno)</span></div>
+    </div>
+
+    <!-- BLOQUE D: Alturas (si suspensión o carrocería) -->
+    <div id="fotos_alturas" style="display:none;">
+      <div class="foto-bloque-titulo">Bloque D — Alturas de luces y matrícula</div>
+      <div class="aviso" style="margin-bottom:10px;">
+        <span class="ico">📏</span>
+        <div>Medir siempre desde el suelo hasta el centro del elemento. Indicar la medida en cada foto (puede pegar un post-it con el valor o anotar en la foto).</div>
+      </div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de faros delanteros — foto general</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de faros delanteros — foto detalle con medida</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de antinieblas delanteros — foto detalle con medida</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de faros traseros — foto general</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de faros traseros — foto detalle con medida</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de catadióptricos — foto detalle con medida</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de matrícula trasera — foto general</span></div>
+      <div class="foto-item"><input type="checkbox"><span class="foto-nombre">Altura de matrícula trasera — foto detalle con medida</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     BOTÓN CONTINUAR + ALERTA
+══════════════════════════════════════════════════════ -->
+<button class="btn btn-primary" onclick="mostrarEnvio()">
+  Continuar al envío →
+</button>
+<div class="alerta-error" id="alerta_val"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     SECCIÓN 9 — ENVÍO
+══════════════════════════════════════════════════════ -->
+<div class="seccion" id="sec_envio" style="display:none;">
+  <div class="seccion-header"><span class="num">9</span> Envío</div>
+  <div class="seccion-body">
+
+    <div class="paso">
+      <div class="paso-titulo"><span class="np">1</span> Descargar PDF</div>
+      <p class="paso-desc">Su formulario está listo. Descargue el PDF con todos los datos rellenados. El archivo se generará en su dispositivo.</p>
+      <button class="btn btn-pdf" onclick="generarPDF()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+        Descargar PDF
+      </button>
+    </div>
+
+    <hr class="sep">
+
+    <div class="paso">
+      <div class="paso-titulo"><span class="np">2</span> Enviar a GuiAl</div>
+      <p class="paso-desc">Elija cómo quiere enviarnos los datos:</p>
+
+      <button class="btn btn-whatsapp" onclick="abrirWhatsApp(false)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar por WhatsApp (texto)
+      </button>
+
+      <button class="btn btn-whatsapp" onclick="abrirWhatsApp(true)" style="background:#1a9e50;margin-top:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Abrir WhatsApp para adjuntar PDF
+      </button>
+    </div>
+
+    <hr class="sep">
+
+    <div class="aviso" style="margin-bottom:0;">
+      <span class="ico">⚠️</span>
+      <div>Recuerde enviarme también al WhatsApp <strong>623 006 822</strong> las fotografías listadas en la sección anterior. Sin ellas no se puede tramitar el expediente.</div>
+    </div>
+
+  </div>
+</div>
+
+<p class="footer-note">GuiAl Ingeniería · Alberto J. Ortiz Sánchez · Berja, Almería · 623 006 822</p>
+</div><!-- /container -->
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ─── PROVINCIAS ──────────────────────────────────────────────────────────────
+const PROVINCIAS = [
+  'Álava','Albacete','Alicante','Almería','Asturias','Ávila','Badajoz','Barcelona',
+  'Bizkaia','Burgos','Cáceres','Cádiz','Cantabria','Castellón','Ciudad Real','Córdoba',
+  'A Coruña','Cuenca','Gipuzkoa','Girona','Granada','Guadalajara','Huelva','Huesca',
+  'Illes Balears','Jaén','La Rioja','Las Palmas','León','Lleida','Lugo','Madrid',
+  'Málaga','Murcia','Navarra','Ourense','Palencia','Pontevedra','Salamanca',
+  'Santa Cruz de Tenerife','Segovia','Sevilla','Soria','Tarragona','Teruel','Toledo',
+  'Valencia','Valladolid','Zamora','Zaragoza','Ceuta','Melilla'
+];
+['prop_prov','tall_prov'].forEach(id => {
+  const sel = document.getElementById(id);
+  PROVINCIAS.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p; opt.textContent = p;
+    sel.appendChild(opt);
+  });
+});
+
+// ─── CARROCERÍA: ELEMENTOS ────────────────────────────────────────────────────
+const ELEM_CAR = [
+  { id: 'pg_del',   nombre: 'Paragolpes delantero' },
+  { id: 'pg_tra',   nombre: 'Paragolpes trasero' },
+  { id: 'faldon',   nombre: 'Faldón delantero' },
+  { id: 'taloneras',nombre: 'Taloneras' },
+  { id: 'aletines', nombre: 'Aletines' },
+  { id: 'aleron',   nombre: 'Alerón' },
+  { id: 'difusor',  nombre: 'Difusor' },
+];
+
+const MATERIALES = ['ABS','Fibra de vidrio','Fibra de carbono','Poliuretano (PU)','Metal','Otro'];
+
+function unidadSelect(id) {
+  return `<select id="${id}"><option value="mm">mm</option><option value="cm">cm</option></select>`;
+}
+
+function bloqueCarroceria(el) {
+  const esAletin = el.id === 'aletines';
+  const camposDim = esAletin ? `
+    <div class="campo">
+      <label>Grosor <span class="req">*</span></label>
+      <div class="con-unidad">
+        <input type="number" id="car_${el.id}_grosor" placeholder="Ej: 80" min="0" step="1">
+        ${unidadSelect(`car_${el.id}_grosor_u`)}
+      </div>
+    </div>` : `
+    <div class="fila-2">
+      <div class="campo">
+        <label>Ancho <span class="req">*</span></label>
+        <div class="con-unidad">
+          <input type="number" id="car_${el.id}_ancho" placeholder="Ej: 1850" min="0" step="1">
+          ${unidadSelect(`car_${el.id}_ancho_u`)}
+        </div>
+      </div>
+      <div class="campo">
+        <label>Alto <span class="req">*</span></label>
+        <div class="con-unidad">
+          <input type="number" id="car_${el.id}_alto" placeholder="Ej: 120" min="0" step="1">
+          ${unidadSelect(`car_${el.id}_alto_u`)}
+        </div>
+      </div>
+    </div>`;
+  return `
+  <div class="bloque-eje" id="car_blq_${el.id}" style="display:none;">
+    <div class="bloque-eje-titulo">${el.nombre}</div>
+    <div class="campo">
+      <label>Marca y referencia <span class="req">*</span></label>
+      <input type="text" id="car_${el.id}_marca" placeholder="Marca y ref. del fabricante">
+    </div>
+    <div class="campo">
+      <label>Material <span class="req">*</span></label>
+      <select id="car_${el.id}_mat">
+        <option value="">— Selecciona —</option>
+        ${MATERIALES.map(m=>`<option value="${m}">${m}</option>`).join('')}
+      </select>
+    </div>
+    ${camposDim}
+    <div class="fila-2">
+      <div class="campo">
+        <label>Nº tornillos de fijación <span style="font-weight:400;color:#999">(opcional)</span></label>
+        <input type="number" id="car_${el.id}_torn" placeholder="Ej: 6" min="0" step="1">
+      </div>
+      <div class="campo">
+        <label>Diámetro tornillos <span style="font-weight:400;color:#999">(opcional)</span></label>
+        <div class="con-unidad">
+          <input type="number" id="car_${el.id}_dtorn" placeholder="Ej: 8" min="0" step="0.1">
+          ${unidadSelect(`car_${el.id}_dtorn_u`)}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+const checksHTML = ELEM_CAR.map(el =>
+  `<label class="check-item" id="lbl_car_${el.id}" onclick="toggleCarroceria('${el.id}')">
+    <input type="checkbox" id="car_${el.id}"> ${el.nombre}
+  </label>`
+).join('');
+document.getElementById('car_checks').innerHTML = checksHTML;
+document.getElementById('car_bloques').innerHTML = ELEM_CAR.map(bloqueCarroceria).join('');
+
+// ─── OTRAS REFORMAS ───────────────────────────────────────────────────────────
+let otrasCount = 0;
+
+function crearBloqueOtra(n) {
+  const div = document.createElement('div');
+  div.className = 'bloque-reforma';
+  div.id = `otra_blq_${n}`;
+  div.innerHTML = `
+    <div class="bloque-reforma-num">Reforma ${n}</div>
+    ${n > 1 ? `<button class="btn-eliminar" onclick="eliminarOtra(${n})">✕ Eliminar</button>` : ''}
+    <div class="campo">
+      <label>Tipo de reforma</label>
+      <input type="text" id="otra_tipo_${n}" placeholder="Ej: Cambio de volante">
+    </div>
+    <div class="fila-2">
+      <div class="campo"><label>Marca</label><input type="text" id="otra_marca_${n}" placeholder="Marca"></div>
+      <div class="campo"><label>Referencia</label><input type="text" id="otra_ref_${n}" placeholder="Referencia"></div>
+    </div>
+    <div class="campo">
+      <label>Dimensiones</label>
+      <input type="text" id="otra_dim_${n}" placeholder="Ej: Diámetro 350 mm">
+    </div>
+    <div class="campo">
+      <label>Otras especificaciones</label>
+      <textarea id="otra_specs_${n}" placeholder="Especificaciones adicionales..."></textarea>
+    </div>`;
+  return div;
+}
+
+function añadirOtraReforma() {
+  otrasCount++;
+  document.getElementById('otras_container').appendChild(crearBloqueOtra(otrasCount));
+  actualizarProgreso();
+}
+
+function eliminarOtra(n) {
+  const el = document.getElementById(`otra_blq_${n}`);
+  if (el) el.remove();
+  actualizarProgreso();
+}
+
+// ─── TALLER: ESCENARIOS ───────────────────────────────────────────────────────
+function setTallerEscenario(n) {
+  setTimeout(() => {
+    // Escenario 1: campos comunes + resto de campos
+    // Escenario 2: campos comunes (solo tall_nombre) + nota
+    // Escenario 3: solo nota, sin campos
+    const comunes = document.getElementById('tall_campos_comunes');
+    const resto   = document.getElementById('tall_campos_resto');
+    const nota2   = document.getElementById('tall_nota_esc2');
+    const nota3   = document.getElementById('tall_nota_esc3');
+
+    comunes.style.display = (n === 1 || n === 2) ? 'block' : 'none';
+    if (resto)  resto.style.display  = (n === 1) ? 'block' : 'none';
+    if (nota2)  nota2.style.display  = (n === 2) ? 'block' : 'none';
+    if (nota3)  nota3.style.display  = (n === 3) ? 'block' : 'none';
+
+    // Marcar active en labels
+    [1,2,3].forEach(i => {
+      const lbl = document.getElementById(`lbl_tall_esc${i}`);
+      if (lbl) lbl.classList.toggle('activo', i === n);
+    });
+    // Limpiar error
+    const err = document.getElementById('tall_esc_err');
+    if (err) err.classList.remove('visible');
+    actualizarProgreso();
+  }, 0);
+}
+
+// ─── TOGGLE SECCIONES CONDICIONALES ──────────────────────────────────────────
+function toggleReforma(tipo) {
+  const cb = document.getElementById('ref_' + tipo);
+  const sec = document.getElementById('sec_' + tipo);
+  const lbl = document.getElementById('lbl_' + tipo);
+  const on = cb.checked;
+  sec.style.display = on ? 'block' : 'none';
+  lbl.classList.toggle('activo', on);
+  if (!on) limpiarSeccion(sec);
+  if (tipo === 'otras' && on && otrasCount === 0) añadirOtraReforma();
+  actualizarFotos();
+  actualizarProgreso();
+}
+
+function toggleCarroceria(id) {
+  const cb = document.getElementById('car_' + id);
+  const blq = document.getElementById('car_blq_' + id);
+  const lbl = document.getElementById('lbl_car_' + id);
+  const on = cb.checked;
+  blq.style.display = on ? 'block' : 'none';
+  lbl.classList.toggle('activo', on);
+  if (!on) limpiarSeccion(blq);
+  actualizarFotos();
+}
+
+function toggleCheck(id, lblId) {
+  // Handled by the label's onclick — just update progress
+  setTimeout(() => {
+    const lbl = document.getElementById(lblId);
+    if (lbl) lbl.classList.toggle('activo', document.getElementById(id).checked);
+    actualizarProgreso();
+  }, 0);
+}
+
+function limpiarSeccion(el) {
+  el.querySelectorAll('input[type="text"],input[type="number"],input[type="tel"],input[type="email"],textarea')
+    .forEach(i => { i.value = ''; i.classList.remove('error-campo'); });
+  el.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+}
+
+// ─── FOTOS DINÁMICAS ──────────────────────────────────────────────────────────
+function actualizarFotos() {
+  const sus = document.getElementById('ref_suspension').checked;
+  const lla = document.getElementById('ref_llantas').checked;
+  const sep = document.getElementById('ref_separadores').checked;
+  const car = document.getElementById('ref_carroceria').checked;
+
+  v('fotos_suspension', sus);
+  v('fotos_llantas', lla);
+  v('fotos_separadores', sep);
+
+  const pg_del = car && document.getElementById('car_pg_del') && document.getElementById('car_pg_del').checked;
+  const pg_tra = car && document.getElementById('car_pg_tra') && document.getElementById('car_pg_tra').checked;
+  const talon  = car && document.getElementById('car_taloneras') && document.getElementById('car_taloneras').checked;
+  const aler   = car && document.getElementById('car_aleron') && document.getElementById('car_aleron').checked;
+
+  v('fotos_car_pg_del', pg_del);
+  v('fotos_car_pg_tra', pg_tra);
+  v('fotos_car_talon',  talon);
+  v('fotos_car_aleron', aler);
+  v('fotos_alturas', sus || car);
+}
+
+function v(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+// ─── PROGRESO ─────────────────────────────────────────────────────────────────
+function actualizarProgreso() {
+  const checks = ['rgpd_acepto'];
+  const textos = ['prop_nombre','prop_nif','prop_dir','prop_pob','prop_cp',
+    'prop_tel','prop_email','veh_matricula','tall_nombre','tall_resp','tall_nif'];
+  const sels = ['prop_prov','tall_prov'];
+
+  let total = checks.length + textos.length + sels.length;
+  let ok = 0;
+
+  checks.forEach(id => { if (document.getElementById(id)?.checked) ok++; });
+  textos.forEach(id => { if ((document.getElementById(id)?.value||'').trim()) ok++; });
+  sels.forEach(id => { if (document.getElementById(id)?.value) ok++; });
+
+  const pct = Math.round((ok / total) * 100);
+  document.getElementById('progress').style.width = Math.min(pct, 100) + '%';
+}
+
+document.addEventListener('input', actualizarProgreso);
+document.addEventListener('change', actualizarProgreso);
+
+// ─── VALIDACIÓN ───────────────────────────────────────────────────────────────
+function validarNIF(nif) {
+  nif = nif.trim().toUpperCase();
+  const letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+  if (/^\d{8}[A-Z]$/.test(nif))
+    return letras[parseInt(nif.slice(0,8)) % 23] === nif[8];
+  if (/^[XYZ]\d{7}[A-Z]$/.test(nif)) {
+    const n = nif.replace('X','0').replace('Y','1').replace('Z','2').slice(0,8);
+    return letras[parseInt(n) % 23] === nif[8];
+  }
+  if (/^[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J]$/i.test(nif)) return true;
+  return false;
+}
+const reEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const reTel   = /^[6-9]\d{8}$/;
+const reCP    = /^\d{5}$/;
+
+function req(id) { return (document.getElementById(id)?.value||'').trim(); }
+function g(id)   { return (document.getElementById(id)?.value||'').trim(); }
+function gu(vid, uid) {
+  const v = g(vid), u = g(uid);
+  return v ? `${v} ${u}` : '—';
+}
+function gch(id) { return document.getElementById(id)?.checked || false; }
+
+// ─── VALIDAR Y MOSTRAR ENVÍO ──────────────────────────────────────────────────
+function mostrarEnvio() {
+  const err = [];
+  if (!gch('rgpd_acepto'))          err.push('Debe aceptar la política de protección de datos');
+  if (!req('prop_nombre'))          err.push('Nombre del propietario');
+  if (!req('prop_nif'))             err.push('NIF/CIF del propietario');
+  else if (!validarNIF(req('prop_nif'))) err.push('NIF/CIF del propietario (formato no válido)');
+  if (!req('prop_dir'))             err.push('Dirección del propietario');
+  if (!req('prop_pob'))             err.push('Población del propietario');
+  if (!req('prop_cp') || !reCP.test(req('prop_cp')))  err.push('Código postal del propietario (5 dígitos)');
+  if (!g('prop_prov'))              err.push('Provincia del propietario');
+  if (!req('prop_tel') || !reTel.test(req('prop_tel').replace(/\s/g,''))) err.push('Teléfono del propietario (formato español)');
+  if (!req('prop_email') || !reEmail.test(req('prop_email'))) err.push('Email del propietario');
+  if (!req('veh_matricula'))        err.push('Matrícula del vehículo');
+  // Validar escenario taller seleccionado
+  const escSel = document.querySelector('input[name="tall_escenario"]:checked');
+  if (!escSel) {
+    err.push('Debe indicar la situación del taller (Sección 3)');
+    document.getElementById('tall_esc_err')?.classList.add('visible');
+  } else if (escSel.value === '1') {
+    if (!req('tall_nombre'))  err.push('Nombre del taller');
+    if (!req('tall_resp'))    err.push('Responsable del taller');
+    if (!req('tall_nif'))     err.push('NIF/CIF del taller');
+    if (!req('tall_dir'))     err.push('Dirección del taller');
+    if (!req('tall_pob'))     err.push('Población del taller');
+    if (!req('tall_cp'))      err.push('Código postal del taller');
+    if (!g('tall_prov'))      err.push('Provincia del taller');
+    if (!req('tall_tel'))     err.push('Teléfono del taller');
+    if (!req('tall_email'))   err.push('Email del taller');
+    if (!req('tall_reg_ind'))    err.push('Nº Registro Industrial del taller');
+    if (!g('tall_actividad'))    err.push('Actividad del taller');
+  } else if (escSel.value === '2') {
+    if (!req('tall_nombre'))  err.push('Nombre del taller (para identificarlo en GuiAl)');
+  }
+  // Escenario 3: no se valida nada del taller
+
+  const hayReforma = ['ref_llantas','ref_separadores','ref_suspension','ref_carroceria','ref_otras']
+    .some(gch);
+  if (!hayReforma) err.push('Debe marcar al menos una reforma realizada (Sección 4)');
+
+  const div = document.getElementById('alerta_val');
+  if (err.length) {
+    div.innerHTML = '⚠️ Revise los siguientes campos antes de continuar:<br>· ' + err.join('<br>· ');
+    div.classList.add('visible');
+    div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+  div.classList.remove('visible');
+  const sec = document.getElementById('sec_envio');
+  sec.style.display = 'block';
+  sec.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('progress').style.width = '100%';
+}
+
+// ─── CONSTRUIR DATOS ──────────────────────────────────────────────────────────
+function reformasSeleccionadas() {
+  const r = [];
+  if (gch('ref_llantas'))     r.push('Llantas y/o neumáticos');
+  if (gch('ref_separadores')) r.push('Separadores de rueda');
+  if (gch('ref_suspension'))  r.push('Suspensión (muelles y/o amortiguadores)');
+  if (gch('ref_carroceria'))  r.push('Carrocería');
+  if (gch('ref_otras'))       r.push('Otras reformas');
+  return r;
+}
+
+// ─── GENERAR PDF ──────────────────────────────────────────────────────────────
+function generarPDF() {
+  if (!window.jspdf) { alert('La librería PDF aún se está cargando. Inténtalo en unos segundos.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const fecha = new Date().toLocaleDateString('es-ES');
+  const PW = 210, M = 18, CW = PW - M * 2;
+  let y = 0;
+
+  function newPage() { doc.addPage(); y = 18; }
+  function checkY(need = 10) { if (y + need > 280) newPage(); }
+
+  // Header
+  doc.setFillColor(120, 0, 0);
+  doc.rect(0, 0, PW, 32, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(17);
+  doc.text('GUIAL INGENIERÍA', M, 13);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Legalización de Reformas de Vehículos · ' + fecha, M, 21);
+  const mat = g('veh_matricula');
+  if (mat) doc.text('Matrícula: ' + mat, M, 28);
+  y = 40;
+
+  function secTitle(t) {
+    checkY(12);
+    doc.setFillColor(70, 70, 70);
+    doc.rect(M, y, CW, 7, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text(t.toUpperCase(), M + 3, y + 5);
+    doc.setTextColor(70, 70, 70);
+    y += 10;
+  }
+
+  function campo(label, value) {
+    if (!value || value === '—') return;
+    checkY(7);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(70, 70, 70);
+    doc.text(label + ':', M, y);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    const lines = doc.splitTextToSize(String(value), CW - 58);
+    doc.text(lines, M + 58, y);
+    y += 5 * lines.length + 1;
+  }
+
+  // ── Propietario
+  secTitle('Datos del Propietario');
+  campo('Nombre y apellidos', g('prop_nombre'));
+  campo('NIF / CIF', g('prop_nif'));
+  campo('Dirección', `${g('prop_dir')}, ${g('prop_cp')} ${g('prop_pob')} (${g('prop_prov')})`);
+  campo('Teléfono', g('prop_tel'));
+  campo('Email', g('prop_email'));
+
+  // ── Vehículo
+  secTitle('Datos del Vehículo');
+  campo('Matrícula', g('veh_matricula'));
+  campo('Marca / Modelo', [g('veh_marca'), g('veh_modelo')].filter(Boolean).join(' ') || '—');
+  campo('Año de fabricación', g('veh_anio'));
+
+  // ── Taller
+  secTitle('Datos del Taller');
+  const escPDF = document.querySelector('input[name="tall_escenario"]:checked')?.value;
+  if (escPDF === '1') {
+    campo('Nombre del taller', g('tall_nombre'));
+    campo('Responsable', g('tall_resp'));
+    campo('NIF / CIF', g('tall_nif'));
+    campo('Dirección', `${g('tall_dir')}, ${g('tall_cp')} ${g('tall_pob')} (${g('tall_prov')})`);
+    campo('Teléfono', g('tall_tel'));
+    campo('Email', g('tall_email'));
+    campo('Nº Registro Industrial', g('tall_reg_ind'));
+    campo('Nº Registro Especial', g('tall_reg_esp'));
+    campo('Actividad', g('tall_actividad'));
+  } else if (escPDF === '2') {
+    campo('Nombre del taller', g('tall_nombre'));
+    campo('Datos del taller', 'En poder de GuiAl Ingeniería');
+  } else {
+    campo('Taller', 'Gestionado por GuiAl Ingeniería');
+  }
+
+  // ── Reformas realizadas (resumen)
+  const refs = reformasSeleccionadas();
+  if (refs.length) {
+    secTitle('Reformas Realizadas');
+    refs.forEach(r => campo('', '• ' + r));
+  }
+
+  // ── 5A Llantas
+  if (gch('ref_llantas')) {
+    secTitle('Reforma: Llantas y Neumáticos');
+    campo('Del. — Marca llantas', g('llan_del_marca'));
+    campo('Del. — Medidas llanta', g('llan_del_llanta'));
+    campo('Del. — Medidas neumático', g('llan_del_neu'));
+    campo('Tra. — Marca llantas', g('llan_tra_marca'));
+    campo('Tra. — Medidas llanta', g('llan_tra_llanta'));
+    campo('Tra. — Medidas neumático', g('llan_tra_neu'));
+    campo('Observaciones', g('llan_obs'));
+  }
+
+  // ── 5B Separadores
+  if (gch('ref_separadores')) {
+    secTitle('Reforma: Separadores de Rueda');
+    campo('Del. — Marca', g('sep_del_marca'));
+    campo('Del. — Referencia', g('sep_del_ref'));
+    campo('Del. — Espesor', gu('sep_del_esp','sep_del_esp_u'));
+    campo('Del. — Neumático instalado', g('sep_del_neu'));
+    campo('Del. — Ancho de vía resultante', gu('sep_del_via','sep_del_via_u'));
+    campo('Tra. — Marca', g('sep_tra_marca'));
+    campo('Tra. — Referencia', g('sep_tra_ref'));
+    campo('Tra. — Espesor', gu('sep_tra_esp','sep_tra_esp_u'));
+    campo('Tra. — Neumático instalado', g('sep_tra_neu'));
+    campo('Tra. — Ancho de vía resultante', gu('sep_tra_via','sep_tra_via_u'));
+    campo('Observaciones', g('sep_obs'));
+  }
+
+  // ── 5C Suspensión
+  if (gch('ref_suspension')) {
+    secTitle('Reforma: Suspensión');
+    campo('Amort. del. — Marca', g('amor_del_marca'));
+    campo('Amort. del. — Referencia', g('amor_del_ref'));
+    campo('Amort. tra. — Marca', g('amor_tra_marca'));
+    campo('Amort. tra. — Referencia', g('amor_tra_ref'));
+    campo('Muelle del. — Marca', g('mue_del_marca'));
+    campo('Muelle del. — Referencia', g('mue_del_ref'));
+    campo('Muelle tra. — Marca', g('mue_tra_marca'));
+    campo('Muelle tra. — Referencia', g('mue_tra_ref'));
+    campo('Muelle del. (3) Longitud', gu('mue_del_long','mue_del_long_u'));
+    campo('Muelle del. (2) Ø exterior', gu('mue_del_dext','mue_del_dext_u'));
+    campo('Muelle del. (1) Ø espira', gu('mue_del_desp','mue_del_desp_u'));
+    campo('Muelle del. — Nº vueltas', g('mue_del_vue'));
+    campo('Muelle tra. (3) Longitud', gu('mue_tra_long','mue_tra_long_u'));
+    campo('Muelle tra. (2) Ø exterior', gu('mue_tra_dext','mue_tra_dext_u'));
+    campo('Muelle tra. (1) Ø espira', gu('mue_tra_desp','mue_tra_desp_u'));
+    campo('Muelle tra. — Nº vueltas', g('mue_tra_vue'));
+    campo('Altura final del vehículo', gu('sus_alt_final','sus_alt_final_u'));
+    campo('Observaciones', g('sus_obs'));
+  }
+
+  // ── 5D Carrocería
+  if (gch('ref_carroceria')) {
+    secTitle('Reforma: Carrocería');
+    ELEM_CAR.forEach(el => {
+      if (!gch('car_' + el.id)) return;
+      campo(el.nombre + ' — Marca/ref.', g(`car_${el.id}_marca`));
+      campo(el.nombre + ' — Material', g(`car_${el.id}_mat`));
+      if (el.id === 'aletines') {
+        campo(el.nombre + ' — Grosor', gu(`car_${el.id}_grosor`,`car_${el.id}_grosor_u`));
+      } else {
+        campo(el.nombre + ' — Ancho', gu(`car_${el.id}_ancho`,`car_${el.id}_ancho_u`));
+        campo(el.nombre + ' — Alto', gu(`car_${el.id}_alto`,`car_${el.id}_alto_u`));
+      }
+      const torn = g(`car_${el.id}_torn`);
+      if (torn) campo(el.nombre + ' — Nº tornillos', torn);
+      const dtorn = gu(`car_${el.id}_dtorn`,`car_${el.id}_dtorn_u`);
+      if (dtorn !== '—') campo(el.nombre + ' — Ø tornillos', dtorn);
+    });
+    campo('Observaciones', g('car_obs'));
+  }
+
+  // ── 5E Otras
+  if (gch('ref_otras')) {
+    secTitle('Otras Reformas');
+    document.querySelectorAll('[id^="otra_blq_"]').forEach((blq, i) => {
+      const n = blq.id.split('_')[2];
+      const tipo = g(`otra_tipo_${n}`);
+      if (!tipo) return;
+      campo(`Reforma ${i+1} — Tipo`, tipo);
+      campo(`Reforma ${i+1} — Marca`, g(`otra_marca_${n}`));
+      campo(`Reforma ${i+1} — Referencia`, g(`otra_ref_${n}`));
+      campo(`Reforma ${i+1} — Dimensiones`, g(`otra_dim_${n}`));
+      campo(`Reforma ${i+1} — Especificaciones`, g(`otra_specs_${n}`));
+    });
+    campo('Observaciones', g('otras_obs'));
+  }
+
+  // ── Medidas finales
+  secTitle('Medidas Finales del Vehículo');
+  campo('Altura total', gu('med_alt','med_alt_u'));
+  campo('Anchura total', gu('med_anch','med_anch_u'));
+  campo('Vía anterior (delantera)', gu('med_via_ant','med_via_ant_u'));
+  campo('Vía posterior (trasera)', gu('med_via_pos','med_via_pos_u'));
+  campo('Longitud total', gu('med_long','med_long_u'));
+  campo('Voladizo trasero', gu('med_vol','med_vol_u'));
+
+  // ── Observaciones generales
+  const obs = g('obs_gen');
+  if (obs) {
+    secTitle('Observaciones Generales');
+    checkY(15);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(80,80,80);
+    const lines = doc.splitTextToSize(obs, CW);
+    checkY(lines.length * 5 + 4);
+    doc.text(lines, M, y);
+    y += lines.length * 5 + 4;
+  }
+
+  // Footer en todas las páginas
+  const total = doc.getNumberOfPages();
+  for (let i = 1; i <= total; i++) {
+    doc.setPage(i);
+    doc.setFontSize(7.5);
+    doc.setTextColor(160,160,160);
+    doc.setFont('helvetica', 'normal');
+    doc.text('GuiAl Ingeniería · Alberto J. Ortiz Sánchez · Berja, Almería · 623 006 822 · guialingenieria@gmail.com', M, 293);
+    doc.text(`Página ${i} de ${total}`, PW - M, 293, { align: 'right' });
+  }
+
+  const nombre = g('prop_nombre').split(' ')[0] || 'cliente';
+  const matricula = g('veh_matricula') || 'vehiculo';
+  doc.save(`Ficha_Reforma_${matricula.replace(/\s/g,'')}_GuiAl.pdf`);
+}
+
+// ─── WHATSAPP ─────────────────────────────────────────────────────────────────
+function abrirWhatsApp(adjuntarPDF) {
+  const fecha = new Date().toLocaleDateString('es-ES');
+  const mat  = g('veh_matricula');
+  const refs = reformasSeleccionadas();
+  let msg = '';
+
+  if (adjuntarPDF) {
+    msg = `Hola Alberto, te envío la ficha de reforma del vehículo`;
+    if (mat) msg += ` (matrícula ${mat})`;
+    msg += `. Adjunto el PDF que acabo de descargar. Te enviaré también las fotografías a continuación.`;
+  } else {
+    msg  = `🚗 *FICHA DE REFORMA DE VEHÍCULO — GuiAl Ingeniería*\n`;
+    msg += `📅 Fecha: ${fecha}\n\n`;
+
+    msg += `👤 *PROPIETARIO*\n`;
+    msg += `Nombre: ${g('prop_nombre')}\n`;
+    msg += `NIF/CIF: ${g('prop_nif')}\n`;
+    msg += `Dirección: ${g('prop_dir')}, ${g('prop_cp')} ${g('prop_pob')} (${g('prop_prov')})\n`;
+    msg += `Teléfono: ${g('prop_tel')}\n`;
+    msg += `Email: ${g('prop_email')}\n`;
+
+    msg += `\n🚙 *VEHÍCULO*\n`;
+    msg += `Matrícula: ${mat || '—'}\n`;
+    const marcaModelo = [g('veh_marca'), g('veh_modelo')].filter(Boolean).join(' ');
+    if (marcaModelo) msg += `Marca/Modelo: ${marcaModelo}\n`;
+    if (g('veh_anio')) msg += `Año: ${g('veh_anio')}\n`;
+
+    msg += `\n🔧 *TALLER*\n`;
+    const escWA = document.querySelector('input[name="tall_escenario"]:checked')?.value;
+    if (escWA === '1') {
+      msg += `Taller: ${g('tall_nombre')}\n`;
+      msg += `Responsable: ${g('tall_resp')}\n`;
+      msg += `NIF/CIF: ${g('tall_nif')}\n`;
+      msg += `Teléfono: ${g('tall_tel')}\n`;
+      if (g('tall_reg_ind')) msg += `Reg. Industrial: ${g('tall_reg_ind')}\n`;
+      if (g('tall_reg_esp')) msg += `Reg. Especial: ${g('tall_reg_esp')}\n`;
+      if (g('tall_actividad')) msg += `Actividad: ${g('tall_actividad')}\n`;
+    } else if (escWA === '2') {
+      msg += `Taller: ${g('tall_nombre')}\n`;
+      msg += `Datos en poder de GuiAl Ingeniería\n`;
+    } else {
+      msg += `Gestionado por GuiAl Ingeniería\n`;
+    }
+
+    msg += `\n🛠 *REFORMAS REALIZADAS*\n`;
+    refs.forEach(r => { msg += `• ${r}\n`; });
+
+    if (gch('ref_llantas')) {
+      msg += `\n🔵 *LLANTAS Y NEUMÁTICOS*\n`;
+      if (g('llan_del_marca')) msg += `Del.: ${g('llan_del_marca')}, ${g('llan_del_llanta')}, neumático ${g('llan_del_neu')}\n`;
+      if (g('llan_tra_marca')) msg += `Tra.: ${g('llan_tra_marca')}, ${g('llan_tra_llanta')}, neumático ${g('llan_tra_neu')}\n`;
+    }
+
+    if (gch('ref_separadores')) {
+      msg += `\n🔵 *SEPARADORES*\n`;
+      if (g('sep_del_marca')) msg += `Del.: ${g('sep_del_marca')} ${g('sep_del_ref')}, esp. ${gu('sep_del_esp','sep_del_esp_u')}, vía ${gu('sep_del_via','sep_del_via_u')}\n`;
+      if (g('sep_tra_marca')) msg += `Tra.: ${g('sep_tra_marca')} ${g('sep_tra_ref')}, esp. ${gu('sep_tra_esp','sep_tra_esp_u')}, vía ${gu('sep_tra_via','sep_tra_via_u')}\n`;
+    }
+
+    if (gch('ref_suspension')) {
+      msg += `\n🔵 *SUSPENSIÓN*\n`;
+      if (g('amor_del_marca')) msg += `Amort. del.: ${g('amor_del_marca')} ${g('amor_del_ref')}\n`;
+      if (g('amor_tra_marca')) msg += `Amort. tra.: ${g('amor_tra_marca')} ${g('amor_tra_ref')}\n`;
+      if (g('mue_del_marca'))  msg += `Muelle del.: ${g('mue_del_marca')} ${g('mue_del_ref')} | L=${gu('mue_del_long','mue_del_long_u')}, Øext=${gu('mue_del_dext','mue_del_dext_u')}, Øesp=${gu('mue_del_desp','mue_del_desp_u')}, vueltas=${g('mue_del_vue')||'—'}\n`;
+      if (g('mue_tra_marca'))  msg += `Muelle tra.: ${g('mue_tra_marca')} ${g('mue_tra_ref')} | L=${gu('mue_tra_long','mue_tra_long_u')}, Øext=${gu('mue_tra_dext','mue_tra_dext_u')}, Øesp=${gu('mue_tra_desp','mue_tra_desp_u')}, vueltas=${g('mue_tra_vue')||'—'}\n`;
+      if (g('sus_alt_final')) msg += `Altura final del vehículo: ${gu('sus_alt_final','sus_alt_final_u')}\n`;
+    }
+
+    if (gch('ref_carroceria')) {
+      msg += `\n🔵 *CARROCERÍA*\n`;
+      ELEM_CAR.forEach(el => {
+        if (!gch('car_' + el.id)) return;
+        if (el.id === 'aletines') {
+          msg += `${el.nombre}: ${g(`car_${el.id}_marca`)}, ${g(`car_${el.id}_mat`)}, grosor ${gu(`car_${el.id}_grosor`,`car_${el.id}_grosor_u`)}\n`;
+        } else {
+          msg += `${el.nombre}: ${g(`car_${el.id}_marca`)}, ${g(`car_${el.id}_mat`)}, ${gu(`car_${el.id}_ancho`,`car_${el.id}_ancho_u`)}×${gu(`car_${el.id}_alto`,`car_${el.id}_alto_u`)}\n`;
+        }
+      });
+    }
+
+    if (gch('ref_otras')) {
+      msg += `\n🔵 *OTRAS REFORMAS*\n`;
+      document.querySelectorAll('[id^="otra_blq_"]').forEach((blq, i) => {
+        const n = blq.id.split('_')[2];
+        const tipo = g(`otra_tipo_${n}`);
+        if (!tipo) return;
+        msg += `${i+1}. ${tipo}`;
+        const marc = g(`otra_marca_${n}`);
+        const ref  = g(`otra_ref_${n}`);
+        if (marc || ref) msg += ` — ${[marc,ref].filter(Boolean).join(' ')}`;
+        const dim = g(`otra_dim_${n}`);
+        if (dim) msg += ` | ${dim}`;
+        msg += '\n';
+      });
+    }
+
+    // Medidas
+    const hayMed = g('med_alt')||g('med_anch')||g('med_via_ant');
+    if (hayMed) {
+      msg += `\n📐 *MEDIDAS FINALES*\n`;
+      if (g('med_alt'))     msg += `Altura total: ${gu('med_alt','med_alt_u')}\n`;
+      if (g('med_anch'))    msg += `Anchura total: ${gu('med_anch','med_anch_u')}\n`;
+      if (g('med_via_ant')) msg += `Vía anterior: ${gu('med_via_ant','med_via_ant_u')}\n`;
+      if (g('med_via_pos')) msg += `Vía posterior: ${gu('med_via_pos','med_via_pos_u')}\n`;
+      if (g('med_long'))    msg += `Longitud total: ${gu('med_long','med_long_u')}\n`;
+      if (g('med_vol'))     msg += `Voladizo trasero: ${gu('med_vol','med_vol_u')}\n`;
+    }
+
+    const obs = g('obs_gen');
+    if (obs) msg += `\n📝 *OBSERVACIONES*\n${obs}\n`;
+
+    msg += `\n_Generado con la ficha de reformas de GuiAl Ingeniería_`;
+  }
+
+  window.open(`https://wa.me/34623006822?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+actualizarProgreso();
+
+// ─── MODAL FOTO EJEMPLO ───────────────────────────────────────────────────────
+const FOTOS_EJEMPLO = {
+  'permiso_frontal': {
+    titulo: 'Permiso de circulación — cara delantera',
+    svg: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="220" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="186" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="184" width="340" height="3" fill="#ddd"/>
+  <rect x="50" y="30" width="240" height="160" rx="6" fill="white" stroke="#003087" stroke-width="2"/>
+  <rect x="50" y="30" width="240" height="28" rx="6" fill="#003087"/>
+  <rect x="50" y="48" width="240" height="10" fill="#003087"/>
+  <text x="170" y="42" text-anchor="middle" font-family="Arial" font-size="8" fill="white" font-weight="bold">PERMISO DE CIRCULACIÓN</text>
+  <text x="80" y="76" font-family="Arial" font-size="7" fill="#333" font-weight="bold">A. Matrícula:</text>
+  <rect x="80" y="79" width="90" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="96" font-family="Arial" font-size="7" fill="#333" font-weight="bold">B. Fecha 1ª matrícula:</text>
+  <rect x="80" y="99" width="70" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="116" font-family="Arial" font-size="7" fill="#333" font-weight="bold">C.1 Titular:</text>
+  <rect x="80" y="119" width="130" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="136" font-family="Arial" font-size="7" fill="#333" font-weight="bold">C.4 Dirección:</text>
+  <rect x="80" y="139" width="190" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="156" font-family="Arial" font-size="7" fill="#333" font-weight="bold">D.1 Marca / D.3 Modelo:</text>
+  <rect x="80" y="159" width="150" height="7" rx="2" fill="#e0e0e0"/>
+  <rect x="52" y="170" width="236" height="18" rx="0" fill="#f5f5f5" stroke="#003087" stroke-width="0.5"/>
+  <text x="170" y="182" text-anchor="middle" font-family="Arial" font-size="7" fill="#003087">Fotografiar cara delantera completa · sin ángulo ni reflejos</text>
+  <rect x="44" y="24" width="252" height="172" rx="4" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="46" y="20" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">◄ documento completo en el encuadre ►</text>
+  <rect x="0" y="196" width="340" height="24" rx="0" fill="#fff8e6"/>
+  <text x="170" y="208" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Permiso de circulación — cara delantera</text>
+  <text x="170" y="218" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Todo el documento visible, sin recortar bordes</text>
+</svg>`,
+    nota: 'Fotografía plana, sin ángulo. Toda la tarjeta en el encuadre. Que se lean todos los datos.'
+  },
+  'permiso_trasera': {
+    titulo: 'Permiso de circulación — cara trasera',
+    svg: `<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="220" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="186" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="184" width="340" height="3" fill="#ddd"/>
+  <rect x="50" y="30" width="240" height="160" rx="6" fill="white" stroke="#003087" stroke-width="2"/>
+  <rect x="50" y="30" width="240" height="28" rx="6" fill="#003087"/>
+  <rect x="50" y="48" width="240" height="10" fill="#003087"/>
+  <text x="170" y="42" text-anchor="middle" font-family="Arial" font-size="8" fill="white" font-weight="bold">PERMISO DE CIRCULACIÓN — REVERSO</text>
+  <text x="80" y="76" font-family="Arial" font-size="7" fill="#333" font-weight="bold">E. Nº Identificación VIN:</text>
+  <rect x="80" y="79" width="160" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="96" font-family="Arial" font-size="7" fill="#333" font-weight="bold">F.1 MTMA (kg):</text>
+  <rect x="80" y="99" width="60" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="160" y="96" font-family="Arial" font-size="7" fill="#333" font-weight="bold">G. MMA (kg):</text>
+  <rect x="160" y="99" width="60" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="116" font-family="Arial" font-size="7" fill="#333" font-weight="bold">J. Categoría / Carrocería:</text>
+  <rect x="80" y="119" width="80" height="7" rx="2" fill="#e0e0e0"/>
+  <text x="80" y="136" font-family="Arial" font-size="7" fill="#333" font-weight="bold">Reformas autorizadas:</text>
+  <rect x="80" y="139" width="190" height="16" rx="2" fill="#e0e0e0"/>
+  <rect x="52" y="160" width="236" height="18" rx="0" fill="#f5f5f5" stroke="#003087" stroke-width="0.5"/>
+  <text x="170" y="172" text-anchor="middle" font-family="Arial" font-size="7" fill="#003087">VIN y datos técnicos · necesario para la tramitación</text>
+  <rect x="44" y="24" width="252" height="160" rx="4" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="46" y="20" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">◄ documento completo en el encuadre ►</text>
+  <rect x="0" y="196" width="340" height="24" rx="0" fill="#fff8e6"/>
+  <text x="170" y="208" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Permiso de circulación — cara trasera</text>
+  <text x="170" y="218" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Incluye VIN y datos técnicos · sin reflejos</text>
+</svg>`,
+    nota: 'La parte trasera también es necesaria. Incluye el VIN y datos técnicos del vehículo.'
+  },
+  'ficha_tecnica': {
+    titulo: 'Ficha técnica / Tarjeta ITV',
+    svg: `<svg viewBox="0 0 340 230" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="230" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="194" width="340" height="36" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="192" width="340" height="3" fill="#ddd"/>
+  <rect x="14" y="30" width="94" height="130" rx="5" fill="white" stroke="#2d6a2d" stroke-width="1.5"/>
+  <rect x="14" y="30" width="94" height="20" rx="5" fill="#2d6a2d"/>
+  <rect x="14" y="42" width="94" height="8" fill="#2d6a2d"/>
+  <text x="61" y="41" text-anchor="middle" font-family="Arial" font-size="6.5" fill="white" font-weight="bold">PÁG. 1 — PORTADA</text>
+  <rect x="20" y="58" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="67" width="66" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="76" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="85" width="50" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="94" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="103" width="70" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="112" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="20" y="121" width="60" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="123" y="30" width="94" height="130" rx="5" fill="white" stroke="#2d6a2d" stroke-width="1.5"/>
+  <rect x="123" y="30" width="94" height="20" rx="5" fill="#2d6a2d"/>
+  <rect x="123" y="42" width="94" height="8" fill="#2d6a2d"/>
+  <text x="170" y="41" text-anchor="middle" font-family="Arial" font-size="6.5" fill="white" font-weight="bold">PÁG. 2 — INSPECCIONES</text>
+  <rect x="129" y="58" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="129" y="67" width="55" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="129" y="76" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="129" y="85" width="40" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="129" y="100" width="50" height="22" rx="3" fill="#e8f5e8" stroke="#2d6a2d" stroke-width="1"/>
+  <text x="154" y="114" text-anchor="middle" font-family="Arial" font-size="6" fill="#2d6a2d" font-weight="bold">SELLO ITV</text>
+  <rect x="129" y="126" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="232" y="30" width="94" height="130" rx="5" fill="white" stroke="#2d6a2d" stroke-width="1.5"/>
+  <rect x="232" y="30" width="94" height="20" rx="5" fill="#2d6a2d"/>
+  <rect x="232" y="42" width="94" height="8" fill="#2d6a2d"/>
+  <text x="279" y="41" text-anchor="middle" font-family="Arial" font-size="6.5" fill="white" font-weight="bold">PÁG. 3 — FICHA TÉCNICA</text>
+  <rect x="238" y="58" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="67" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="76" width="60" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="85" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="94" width="45" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="103" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="112" width="70" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="238" y="121" width="82" height="5" rx="1" fill="#e0e0e0"/>
+  <rect x="0" y="174" width="340" height="20" rx="0" fill="#fff8e6"/>
+  <text x="170" y="187" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Ficha técnica / Tarjeta ITV — todas las páginas</text>
+  <rect x="0" y="204" width="340" height="26" rx="0" fill="#fff8e6"/>
+  <text x="170" y="214" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Cada página en una foto independiente.</text>
+  <text x="170" y="225" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Portada verde, inspecciones y ficha de datos.</text>
+</svg>`,
+    nota: 'Fotografiar cada página por separado. Portada verde, inspecciones y ficha de datos.'
+  },
+  'frontal': {
+    titulo: 'Fotografía frontal del vehículo',
+    svg: `<svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="240" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="206" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="204" width="340" height="3" fill="#ddd"/>
+  <rect x="50" y="148" width="240" height="58" rx="4" fill="#4a90d9"/>
+  <path d="M 72,148 L 84,106 L 256,106 L 268,148 Z" fill="#3a7fc9"/>
+  <path d="M 80,147 L 90,110 L 250,110 L 260,147 Z" fill="#b0d4f0"/>
+  <rect x="50" y="160" width="52" height="24" rx="5" fill="#ffe066"/>
+  <rect x="54" y="163" width="44" height="18" rx="3" fill="#fff9cc"/>
+  <rect x="238" y="160" width="52" height="24" rx="5" fill="#ffe066"/>
+  <rect x="242" y="163" width="44" height="18" rx="3" fill="#fff9cc"/>
+  <rect x="134" y="168" width="72" height="28" rx="4" fill="#1e1e1e"/>
+  <rect x="122" y="196" width="96" height="12" rx="2" fill="white"/>
+  <text x="170" y="205" text-anchor="middle" font-family="Arial" font-size="7" fill="#333" font-weight="bold">1234 ABC</text>
+  <rect x="48" y="200" width="58" height="18" rx="6" fill="#222"/>
+  <rect x="52" y="203" width="50" height="12" rx="4" fill="#444"/>
+  <rect x="234" y="200" width="58" height="18" rx="6" fill="#222"/>
+  <rect x="238" y="203" width="50" height="12" rx="4" fill="#444"/>
+  <rect x="36" y="36" width="268" height="186" rx="3" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="38" y="32" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">◄ vehículo completo en el encuadre ►</text>
+  <rect x="0" y="216" width="340" height="24" rx="0" fill="#fff8e6"/>
+  <text x="170" y="228" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Frontal — vehículo entero, sin cortar</text>
+  <text x="170" y="238" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Centrado, a la altura del vehículo. Mín. 3 m de distancia.</text>
+</svg>`,
+    nota: 'Vehículo completo en el encuadre. No cortar ruedas ni techo. Centrado y a nivel.'
+  },
+  'trasera': {
+    titulo: 'Fotografía trasera del vehículo',
+    svg: `<svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="240" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="206" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="204" width="340" height="3" fill="#ddd"/>
+  <rect x="50" y="148" width="240" height="58" rx="4" fill="#4a90d9"/>
+  <path d="M 72,148 L 84,106 L 256,106 L 268,148 Z" fill="#3a7fc9"/>
+  <path d="M 80,147 L 90,110 L 250,110 L 260,147 Z" fill="#b0d4f0"/>
+  <path d="M 50,152 L 50,186 Q 54,192 74,190 L 74,152 Z" fill="#e63946"/>
+  <path d="M 290,152 L 290,186 Q 286,192 266,190 L 266,152 Z" fill="#e63946"/>
+  <rect x="120" y="190" width="100" height="12" rx="2" fill="white" stroke="#555" stroke-width="0.5"/>
+  <text x="170" y="199" text-anchor="middle" font-family="Arial" font-size="7" fill="#333" font-weight="bold">1234 ABC</text>
+  <rect x="48" y="200" width="58" height="18" rx="6" fill="#222"/>
+  <rect x="52" y="203" width="50" height="12" rx="4" fill="#444"/>
+  <rect x="234" y="200" width="58" height="18" rx="6" fill="#222"/>
+  <rect x="238" y="203" width="50" height="12" rx="4" fill="#444"/>
+  <rect x="36" y="36" width="268" height="186" rx="3" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="38" y="32" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">◄ vehículo completo en el encuadre ►</text>
+  <rect x="0" y="216" width="340" height="24" rx="0" fill="#fff8e6"/>
+  <text x="170" y="228" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Trasera — vehículo entero, sin cortar</text>
+  <text x="170" y="238" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Matrícula y pilotos visibles. Mín. 3 m de distancia.</text>
+</svg>`,
+    nota: 'Matrícula trasera y pilotos visibles. Vehículo completo, sin recortar.'
+  },
+  'lateral_izq': {
+    titulo: 'Fotografía lateral del vehículo',
+    svg: `<svg viewBox="0 0 340 270" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="270" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+  <rect x="0" y="236" width="340" height="34" rx="0" fill="#f0f0f0"/>
+  <rect x="0" y="234" width="340" height="3" fill="#ddd"/>
+  <circle cx="96" cy="218" r="24" fill="#222"/>
+  <circle cx="96" cy="218" r="14" fill="#444"/>
+  <circle cx="244" cy="218" r="24" fill="#222"/>
+  <circle cx="244" cy="218" r="14" fill="#444"/>
+  <rect x="30" y="152" width="280" height="66" rx="6" fill="#4a90d9"/>
+  <rect x="70" y="112" width="190" height="42" rx="6" fill="#3a7fc9"/>
+  <rect x="76" y="117" width="78" height="32" rx="3" fill="#b0d4f0"/>
+  <rect x="160" y="117" width="94" height="32" rx="3" fill="#b0d4f0"/>
+  <rect x="30" y="165" width="28" height="18" rx="4" fill="#ffe066"/>
+  <rect x="33" y="168" width="22" height="12" rx="2" fill="#fff9cc"/>
+  <rect x="282" y="165" width="28" height="18" rx="4" fill="#e63946"/>
+  <rect x="14" y="38" width="312" height="202" rx="3" fill="none" stroke="#e63946" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="16" y="34" font-family="Arial" font-size="8" fill="#e63946" font-weight="bold">lateral completo en el encuadre</text>
+  <rect x="0" y="248" width="340" height="22" rx="0" fill="#fff8e6"/>
+  <text x="170" y="260" text-anchor="middle" font-family="Arial" font-size="9" fill="#b8860b" font-weight="bold">Lateral izquierdo — vehículo entero</text>
+  <text x="170" y="268" text-anchor="middle" font-family="Arial" font-size="8" fill="#888">Paralelo al vehículo. Ambas ruedas visibles.</text>
+</svg>`,
+    nota: 'Todo el lateral en una sola foto. Paralelo al vehículo, ambas ruedas visibles. Repetir por ambos lados.'
+  }
+};
+
+function verFotoEjemplo(clave) {
+  const dato = FOTOS_EJEMPLO[clave];
+  if (!dato) return;
+  document.getElementById('modalFotoTitulo').textContent = dato.titulo;
+  document.getElementById('modalFotoSvg').innerHTML = dato.svg;
+  document.getElementById('modalFotoNota').textContent = dato.nota;
+  document.getElementById('modalFotoEjemplo').classList.add('visible');
+}
+
+function cerrarModalFoto(e) {
+  if (!e || e.target === document.getElementById('modalFotoEjemplo')) {
+    document.getElementById('modalFotoEjemplo').classList.remove('visible');
+  }
+}
+
+</script>
+
+<!-- ══════════════════════════════════════════════════════
+     MODAL FOTO DE EJEMPLO
+══════════════════════════════════════════════════════ -->
+<div class="modal-foto" id="modalFotoEjemplo" onclick="cerrarModalFoto(event)">
+  <div class="modal-foto-inner">
+    <div class="modal-foto-titulo" id="modalFotoTitulo">Ejemplo de fotografía</div>
+    <button class="modal-foto-cerrar" onclick="cerrarModalFoto()">×</button>
+    <div id="modalFotoSvg"></div>
+    <div class="modal-foto-nota" id="modalFotoNota"></div>
+  </div>
+</div>
+</body>
+</html>
