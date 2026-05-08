@@ -1368,6 +1368,13 @@ textarea { resize: vertical; min-height: 80px; }
      JAVASCRIPT
 ══════════════════════════════════════════════════════ -->
 <script>
+// ─── DESACTIVAR AUTOCOMPLETADO EN INPUTS NUMÉRICOS ───────────────────────────
+// Evita que el navegador autocomplete campos como "Anchura del paragolpes"
+// con valores ya introducidos en "Anchura del vehículo" o similares.
+document.querySelectorAll('input[type="number"]').forEach(inp => {
+  inp.setAttribute('autocomplete', 'off');
+});
+
 // ─── PROVINCIAS ──────────────────────────────────────────────────────────────
 const PROVINCIAS = [
   'Álava','Albacete','Alicante','Almería','Asturias','Ávila','Badajoz','Barcelona',
@@ -2016,6 +2023,7 @@ function abrirWhatsApp(adjuntarPDF) {
           msg += `${el.nombre}: ${g(`car_${el.id}_marca`)}, ${g(`car_${el.id}_mat`)}, ${gu(`car_${el.id}_ancho`,`car_${el.id}_ancho_u`)}×${gu(`car_${el.id}_alto`,`car_${el.id}_alto_u`)}\n`;
         }
       });
+      if (g('car_obs')) msg += `Observaciones: ${g('car_obs')}\n`;
     }
 
     if (gch('ref_otras')) {
