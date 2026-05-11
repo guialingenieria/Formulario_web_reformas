@@ -107,6 +107,140 @@ header .sub {
 }
 .seccion-body { padding: 18px; }
 
+/* ─── VÍDEOS TUTORIALES ─────────────────────────────────────── */
+.seccion-header .video-link {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.seccion-header .video-link:hover,
+.seccion-header .video-link:active { background: rgba(255,255,255,0.28); }
+.seccion-header .video-link::before { content: "▶"; font-size: 9px; }
+
+.videos-tuto details {
+  border: none;
+}
+.videos-tuto summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  background: var(--gris-titulo);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.videos-tuto summary::-webkit-details-marker { display: none; }
+.videos-tuto summary::before {
+  content: "▶";
+  display: inline-block;
+  font-size: 11px;
+  transition: transform 0.2s;
+  background: var(--burdeos);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  flex-shrink: 0;
+}
+.videos-tuto details[open] summary::before { transform: rotate(90deg); }
+.videos-tuto .videos-body { padding: 16px 18px; }
+.videos-tuto .videos-body p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  color: var(--gris-texto);
+}
+.videos-tuto ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: vid;
+}
+.videos-tuto ol li {
+  counter-increment: vid;
+  margin-bottom: 8px;
+}
+.videos-tuto ol li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  color: var(--gris-titulo);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.videos-tuto ol li a:hover,
+.videos-tuto ol li a:active { background: #e8e8e8; }
+.videos-tuto ol li a::before {
+  content: counter(vid);
+  background: var(--burdeos);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Menú desplegable para múltiples vídeos en una sección */
+.video-menu { position: relative; display: inline-block; margin-left: auto; }
+.video-menu .video-link { margin-left: 0; }
+.video-menu-items {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  min-width: 200px;
+  z-index: 10;
+  overflow: hidden;
+}
+.video-menu.open .video-menu-items { display: block; }
+.video-menu-items a {
+  display: block;
+  padding: 10px 14px;
+  color: var(--gris-titulo);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+}
+.video-menu-items a:last-child { border-bottom: none; }
+.video-menu-items a:hover,
+.video-menu-items a:active { background: #f5f5f5; }
+
+
 /* CAMPOS */
 .campo { margin-bottom: 16px; }
 .campo:last-child { margin-bottom: 0; }
@@ -527,10 +661,33 @@ textarea { resize: vertical; min-height: 80px; }
 <div class="container">
 
 <!-- ══════════════════════════════════════════════════════
+     VÍDEOS TUTORIALES (colapsable)
+══════════════════════════════════════════════════════ -->
+<div class="seccion videos-tuto">
+  <details>
+    <summary>Vídeos tutoriales — ayuda para rellenar el formulario</summary>
+    <div class="videos-body">
+      <p>Si tiene cualquier duda al rellenar el formulario, puede ver estos vídeos cortos donde se explica paso a paso cada sección:</p>
+      <ol>
+        <li><a href="https://youtube.com/shorts/l5qP0XFe-Xg" target="_blank" rel="noopener">Información, protección de datos y datos del propietario</a></li>
+        <li><a href="https://youtube.com/shorts/Epxpkxt3fEQ" target="_blank" rel="noopener">Datos del taller</a></li>
+        <li><a href="https://youtube.com/shorts/JwfkKv5zsHg" target="_blank" rel="noopener">Reforma del vehículo (parte 1 de 3)</a></li>
+        <li><a href="https://youtube.com/shorts/yomZ0fOyP_M" target="_blank" rel="noopener">Reforma del vehículo (parte 2 de 3)</a></li>
+        <li><a href="https://youtube.com/shorts/7OY9K03QWyo" target="_blank" rel="noopener">Reforma del vehículo (parte 3 de 3)</a></li>
+        <li><a href="https://youtube.com/shorts/n4bKvqKtHkA" target="_blank" rel="noopener">Medidas y observaciones generales</a></li>
+        <li><a href="https://youtube.com/shorts/svmtq4RZ8wE" target="_blank" rel="noopener">Fotografías del vehículo</a></li>
+        <li><a href="https://youtube.com/shorts/Lpvh9yIzQAs" target="_blank" rel="noopener">Envío al ingeniero (parte 1 de 2)</a></li>
+        <li><a href="https://youtube.com/shorts/7S9dYi5w9Ng" target="_blank" rel="noopener">Envío al ingeniero (parte 2 de 2)</a></li>
+      </ol>
+    </div>
+  </details>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      SECCIÓN 1 — PRESENTACIÓN Y RGPD
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">1</span> Información y protección de datos</div>
+  <div class="seccion-header"><span class="num">1</span> Información y protección de datos<a class="video-link" href="https://youtube.com/shorts/l5qP0XFe-Xg" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
     <p style="font-size:14px;line-height:1.6;margin-bottom:16px;color:var(--gris-texto);">
       Gracias por confiar en <strong>GuiAl Ingeniería</strong> para la legalización de la reforma de su vehículo.
@@ -561,7 +718,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 2 — DATOS DEL PROPIETARIO
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">2</span> Datos del propietario del vehículo</div>
+  <div class="seccion-header"><span class="num">2</span> Datos del propietario del vehículo<a class="video-link" href="https://youtube.com/shorts/l5qP0XFe-Xg" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
     <div class="campo">
       <label>Nombre y apellidos <span class="req">*</span></label>
@@ -630,7 +787,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 3 — DATOS DEL TALLER
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">3</span> Datos del taller que realiza la reforma</div>
+  <div class="seccion-header"><span class="num">3</span> Datos del taller que realiza la reforma<a class="video-link" href="https://youtube.com/shorts/Epxpkxt3fEQ" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
 
     <!-- Selector de escenario -->
@@ -737,7 +894,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 4 — SELECTOR DE REFORMAS
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">4</span> Reformas realizadas</div>
+  <div class="seccion-header"><span class="num">4</span> Reformas realizadas<span class="video-menu" onclick="event.stopPropagation();this.classList.toggle('open')"><button type="button" class="video-link">Ver vídeos (3)</button><div class="video-menu-items"><a href="https://youtube.com/shorts/JwfkKv5zsHg" target="_blank" rel="noopener">Parte 1 de 3</a><a href="https://youtube.com/shorts/yomZ0fOyP_M" target="_blank" rel="noopener">Parte 2 de 3</a><a href="https://youtube.com/shorts/7OY9K03QWyo" target="_blank" rel="noopener">Parte 3 de 3</a></div></span></div>
   <div class="seccion-body">
     <p style="font-size:13px;color:var(--gris-texto);margin-bottom:14px;line-height:1.5;">
       Marque todas las reformas que se hayan realizado en el vehículo. Solo aparecerán las secciones correspondientes a las reformas marcadas.
@@ -1100,7 +1257,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 6 — MEDIDAS FINALES DEL VEHÍCULO
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">6</span> Medidas finales del vehículo</div>
+  <div class="seccion-header"><span class="num">6</span> Medidas finales del vehículo<a class="video-link" href="https://youtube.com/shorts/n4bKvqKtHkA" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
 
     <!-- Esquema de medidas -->
@@ -1202,7 +1359,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 7 — OBSERVACIONES GENERALES
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">7</span> Observaciones generales</div>
+  <div class="seccion-header"><span class="num">7</span> Observaciones generales<a class="video-link" href="https://youtube.com/shorts/n4bKvqKtHkA" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
     <div class="campo">
       <label>Observaciones adicionales (opcional)</label>
@@ -1215,7 +1372,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 8 — CHECKLIST DE FOTOGRAFÍAS
 ══════════════════════════════════════════════════════ -->
 <div class="seccion">
-  <div class="seccion-header"><span class="num">8</span> Fotografías a enviar por WhatsApp</div>
+  <div class="seccion-header"><span class="num">8</span> Fotografías a enviar por WhatsApp<a class="video-link" href="https://youtube.com/shorts/svmtq4RZ8wE" target="_blank" rel="noopener">Ver vídeo</a></div>
   <div class="seccion-body">
     <div class="aviso-fotos">
       📱 <strong>Último paso — Fotografías:</strong> Sin estas fotografías no se puede tramitar el expediente.
@@ -1322,7 +1479,7 @@ textarea { resize: vertical; min-height: 80px; }
      SECCIÓN 9 — ENVÍO
 ══════════════════════════════════════════════════════ -->
 <div class="seccion" id="sec_envio" style="display:none;">
-  <div class="seccion-header"><span class="num">9</span> Envío</div>
+  <div class="seccion-header"><span class="num">9</span> Envío<span class="video-menu" onclick="event.stopPropagation();this.classList.toggle('open')"><button type="button" class="video-link">Ver vídeos (2)</button><div class="video-menu-items"><a href="https://youtube.com/shorts/Lpvh9yIzQAs" target="_blank" rel="noopener">Parte 1 de 2</a><a href="https://youtube.com/shorts/7S9dYi5w9Ng" target="_blank" rel="noopener">Parte 2 de 2</a></div></span></div>
   <div class="seccion-body">
 
     <div class="paso">
@@ -1368,6 +1525,13 @@ textarea { resize: vertical; min-height: 80px; }
      JAVASCRIPT
 ══════════════════════════════════════════════════════ -->
 <script>
+// ─── CERRAR MENÚS DE VÍDEOS AL HACER CLIC FUERA ──────────────────────────────
+document.addEventListener('click', function(e) {
+  document.querySelectorAll('.video-menu.open').forEach(menu => {
+    if (!menu.contains(e.target)) menu.classList.remove('open');
+  });
+});
+
 // ─── DESACTIVAR AUTOCOMPLETADO EN INPUTS NUMÉRICOS ───────────────────────────
 // Evita que el navegador autocomplete campos como "Anchura del paragolpes"
 // con valores ya introducidos en "Anchura del vehículo" o similares.
